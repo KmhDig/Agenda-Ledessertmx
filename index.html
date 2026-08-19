@@ -2631,6 +2631,30 @@ window.open(
         '_blank'
     );
 }
+     function requestCakeDesignWA(orderId) {
+
+    const order = state.orders.find(
+        o => String(o.id) === String(orderId)
+    );
+
+    if (!order) {
+        console.error('No se encontró el pedido:', orderId);
+        return;
+    }
+
+    const cleanPhone =
+        String(order.clientPhone || '').replace(/\D/g, '');
+
+    const text =
+        `👤 Hola ${order.clientName}, si tienes alguna idea o referencia para el diseño de tu pastel, puedes enviárnosla por este medio. 🎨\n\n` +
+        `Puedes mandarnos una foto, captura o imagen de algún diseño que te guste para tomarlo como referencia.\n\n` +
+        `¡Muchas gracias!`;
+
+    const waUrl =
+        `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`;
+
+    window.open(waUrl, '_blank');
+}
 
  // ============================================
 // AGREGAR PEDIDO A GOOGLE CALENDAR
