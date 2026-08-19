@@ -1883,19 +1883,33 @@ renderKitchenOrders();
           const detallesFormateados = (pendingOrderData.eventDetails || 'Ninguno')
     .replace(/\r?\n/g, '%0A');
 
-const msg = `*SOLICITUD DE PEDIDO*%0A%0A` +
+let informacionEntrega = '';
+
+if (pendingOrderData.deliveryMethod === 'Recoger en tienda') {
+
+    informacionEntrega =
+        `🏪 *Sucursal:* ${pendingOrderData.branchName}%0A` +
+        `🕐 *Horario:* ${pendingOrderData.pickupTime || 'No especificado'}%0A`;
+
+} else {
+
+    informacionEntrega =
+        `📍 *Dirección:* ${pendingOrderData.address || 'No especificada'}%0A` +
+        `👤 *Recibe:* ${pendingOrderData.receiver || 'No especificado'}%0A` +
+        `🕐 *Horario:* ${pendingOrderData.deliveryTime || 'No especificado'}%0A`;
+}
+
+const msg = `*🍰 SOLICITUD DE PEDIDO*%0A%0A` +
     `👤 *Cliente:* ${pendingOrderData.clientName}%0A` +
     `📱 *Teléfono:* ${pendingOrderData.clientPhone}%0A` +
     `📅 *Fecha Evento:* ${pendingOrderData.eventDate}%0A` +
     `🎉 *Tipo Evento:* ${pendingOrderData.eventType}%0A` +
     `*Porciones:* ${pendingOrderData.portions}%0A` +
-    ` *Pan:* ${pendingOrderData.flavor}%0A` +
-    ` *Relleno:* ${pendingOrderData.filling}%0A` +
-    ` *Betún:* ${pendingOrderData.frosting}%0A` +
-    `🚚 *Método Entrega:* ${pendingOrderData.deliveryMethod}%0A` +
-    `📍 *Dirección:* ${pendingOrderData.address || 'No aplica'}%0A` +
-    `👤 *Recibe:* ${pendingOrderData.receiver || 'No aplica'}%0A` +
-    `🕐 *Horario:* ${pendingOrderData.deliveryTime || pendingOrderData.pickupTime || 'No especificado'}%0A` +
+    `*Pan:* ${pendingOrderData.flavor}%0A` +
+    `*Relleno:* ${pendingOrderData.filling}%0A` +
+    `*Betún:* ${pendingOrderData.frosting}%0A` +
+    `🚚*Método Entrega:* ${pendingOrderData.deliveryMethod}%0A` +
+    informacionEntrega +
     `🎨 *Detalles Adicionales:*%0A${detallesFormateados}`;
 
             const waNumber = state.businessPhone.replace(/\D/g, '');
