@@ -2529,26 +2529,21 @@ function addCatalogOption(key, inputId) {
         ? `\n*UBICACIÓN:* ${branch.map}`
         : '';
 
-  const msg = `Hola ${order.clientName}, te escribimos para compartirte el resumen de la información de tu pedido:
-
-\u{1F4C5} *FECHA DE ENTREGA:* ${order.eventDate}
-\u{1F389} *EVENTO:* ${order.eventType}
-
-*DETALLE DEL PEDIDO:*
-Porciones: ${order.portions}
-Pan: ${order.flavor}
-Relleno: ${order.filling}
-Betún: ${order.frosting}
-
-\u{1F69A} *MÉTODO DE ENTREGA:* ${order.deliveryMethod}
-\u{1F4CD} *LOGÍSTICA/HORARIO:* ${order.deliveryDetails}${mapInfo}
-
-\u{1F3A8} *DETALLES:*
-${order.eventDetails || 'Ninguno'}
-
-Por favor confirma si todo está correcto o menciónanos si hay algún error para corregirlo a tiempo.
-
-¡Muchas gracias!`;
+ const msg =
+    `👤 Hola ${order.clientName}, te escribimos para compartirte el resumen de la información de tu pedido:\n\n` +
+    `📅 *FECHA DE ENTREGA:* ${order.eventDate}\n` +
+    `🎉 *EVENTO:* ${order.eventType}\n\n` +
+    `*DETALLE DEL PEDIDO:*\n` +
+    `Porciones: ${order.portions}\n` +
+    `Pan: ${order.flavor}\n` +
+    `Relleno: ${order.filling}\n` +
+    `Betún: ${order.frosting}\n\n` +
+    `🚚 *MÉTODO DE ENTREGA:* ${order.deliveryMethod}\n` +
+    `📍 *LOGÍSTICA/HORARIO:* ${order.deliveryDetails}${mapInfo}\n\n` +
+    `🎨 *DETALLES:*\n` +
+    `${order.eventDetails || 'Ninguno'}\n\n` +
+    `Por favor confirma si todo está correcto o menciónanos si hay algún error para corregirlo a tiempo.\n\n` +
+    `¡Muchas gracias!`;
 
 const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
 
