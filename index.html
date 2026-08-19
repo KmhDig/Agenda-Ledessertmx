@@ -2606,20 +2606,11 @@ function sendOrderReminderWA(orderId) {
         ? `\n*UBICACIÓN:* ${branch.map}`
         : '';
 
-    const text =
-    `👤 Hola ${order.clientName}, te escribimos para recordar la fecha y la logística de tu entrega de pedido:\n\n` +
+  const text =
+    `👤 Hola ${order.clientName}, te escribimos para recordarte la fecha y logística de tu entrega:\n\n` +
     `📅 *FECHA DE ENTREGA:* ${order.eventDate}\n` +
-    `🎉 *EVENTO:* ${order.eventType}\n\n` +
-    `🍰 *DETALLE DEL PEDIDO:*\n` +
-    `Porciones: ${order.portions}\n` +
-    `Pan: ${order.flavor}\n` +
-    `Relleno: ${order.filling}\n` +
-    `Betún: ${order.frosting}\n\n` +
     `🚚 *MÉTODO DE ENTREGA:* ${order.deliveryMethod}\n` +
     `📍 *LOGÍSTICA/HORARIO:* ${order.deliveryDetails}${mapInfo}\n\n` +
-    `${restante > 0
-        ? `💰 *RESTANTE PENDIENTE:* $${restante.toFixed(2)}`
-        : `✅ *PAGO:* Liquidado`}\n\n` +
     `Cualquier detalle o ajuste, quedamos con gusto a tus órdenes. ¡Muchas gracias!`;
 
 window.open(
