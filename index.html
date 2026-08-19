@@ -3736,7 +3736,7 @@ function sendSummaryWA() {
         return fecha;
     }
 
-    // Obtener únicamente pedidos anteriores a HOY
+     // Obtener únicamente pedidos anteriores a HOY
     const pastOrders = state.orders.filter(o => {
 
         const fechaPedido = convertirFechaPedido(o.eventDate);
