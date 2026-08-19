@@ -2529,17 +2529,26 @@ function addCatalogOption(key, inputId) {
         ? `\n*UBICACIÓN:* ${branch.map}`
         : '';
 
-    const msg = `Hola ${order.clientName}, te escribimos para compartirte el resumen de la información de tu pedido:
+   const msg = `Hola ${order.clientName}, te escribimos para compartirte el resumen de la información de tu pedido:
 
-*FECHA DE ENTREGA:* ${order.eventDate}
-*EVENTO:* ${order.eventType}
-*DETALLE DEL PEDIDO:* ${order.portions}, Pan ${order.flavor}, Relleno ${order.filling}, Betún ${order.frosting}
-*MÉTODO DE ENTREGA:* ${order.deliveryMethod}
-*LOGÍSTICA/HORARIO:* ${order.deliveryDetails}${mapInfo}
-*Detalles:* ${order.eventDetails}
+📅 *FECHA DE ENTREGA:* ${order.eventDate}
+🎉 *EVENTO:* ${order.eventType}
 
-Por favor confirma si todo está correcto o menciónanos si hay algún error para corregirlo a tiempo. ¡Muchas gracias!`;
+*DETALLE DEL PEDIDO:*
+Porciones: ${order.portions}
+Pan: ${order.flavor}
+Relleno: ${order.filling}
+Betún: ${order.frosting}
 
+🚚 *MÉTODO DE ENTREGA:* ${order.deliveryMethod}
+📍 *LOGÍSTICA/HORARIO:* ${order.deliveryDetails}${mapInfo}
+
+🎨 *DETALLES:*
+${order.eventDetails || 'Ninguno'}
+
+Por favor confirma si todo está correcto o menciónanos si hay algún error para corregirlo a tiempo.
+
+¡Muchas gracias!`;
     const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
 
     window.open(waUrl, '_blank');
