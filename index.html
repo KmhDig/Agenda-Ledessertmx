@@ -1887,10 +1887,19 @@ let informacionEntrega = '';
 
 if (pendingOrderData.deliveryMethod === 'Recoger en tienda') {
 
+    const sucursal = state.branches.find(
+        branch =>
+            String(branch.name).trim() ===
+            String(pendingOrderData.branchName).trim()
+    );
+
     informacionEntrega =
         `🏬 *Sucursal:* ${pendingOrderData.branchName}%0A` +
         (pendingOrderData.branchAddress
             ? `📍 *Dirección:* ${pendingOrderData.branchAddress}%0A`
+            : '') +
+        (sucursal?.map
+            ? `🔗 *Google Maps:* ${sucursal.map}%0A`
             : '') +
         `🕐 *Horario:* ${pendingOrderData.pickupTime || 'No especificado'}%0A`;
 
