@@ -2531,8 +2531,8 @@ function addCatalogOption(key, inputId) {
 
    const msg = `Hola ${order.clientName}, te escribimos para compartirte el resumen de la información de tu pedido:
 
-📅 *FECHA DE ENTREGA:* ${order.eventDate}
-🎉 *EVENTO:* ${order.eventType}
+`📅 *FECHA DE ENTREGA:* ${order.eventDate}
+`🎉 *EVENTO:* ${order.eventType}
 
 *DETALLE DEL PEDIDO:*
 Porciones: ${order.portions}
@@ -2540,10 +2540,10 @@ Pan: ${order.flavor}
 Relleno: ${order.filling}
 Betún: ${order.frosting}
 
-🚚 *MÉTODO DE ENTREGA:* ${order.deliveryMethod}
-📍 *LOGÍSTICA/HORARIO:* ${order.deliveryDetails}${mapInfo}
+`🚚 *MÉTODO DE ENTREGA:* ${order.deliveryMethod}
+`📍 *LOGÍSTICA/HORARIO:* ${order.deliveryDetails}${mapInfo}
 
-🎨 *DETALLES:*
+`🎨 *DETALLES:*
 ${order.eventDetails || 'Ninguno'}
 
 Por favor confirma si todo está correcto o menciónanos si hay algún error para corregirlo a tiempo.
