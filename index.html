@@ -1888,7 +1888,10 @@ let informacionEntrega = '';
 if (pendingOrderData.deliveryMethod === 'Recoger en tienda') {
 
     informacionEntrega =
-        `🏪 *Sucursal:* ${pendingOrderData.branchName}%0A` +
+        `🏬 *Sucursal:* ${pendingOrderData.branchName}%0A` +
+        (pendingOrderData.branchAddress
+            ? `📍 *Dirección:* ${pendingOrderData.branchAddress}%0A`
+            : '') +
         `🕐 *Horario:* ${pendingOrderData.pickupTime || 'No especificado'}%0A`;
 
 } else {
@@ -1899,7 +1902,7 @@ if (pendingOrderData.deliveryMethod === 'Recoger en tienda') {
         `🕐 *Horario:* ${pendingOrderData.deliveryTime || 'No especificado'}%0A`;
 }
 
-const msg = `*🍰 SOLICITUD DE PEDIDO*%0A%0A` +
+const msg = `*SOLICITUD DE PEDIDO*%0A%0A` +
     `👤 *Cliente:* ${pendingOrderData.clientName}%0A` +
     `📱 *Teléfono:* ${pendingOrderData.clientPhone}%0A` +
     `📅 *Fecha Evento:* ${pendingOrderData.eventDate}%0A` +
