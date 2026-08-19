@@ -3617,22 +3617,24 @@ function openSummaryModal(id) {
         (order.anticipo || 0);
 
     const txt =
-        `*RESUMEN OFICIAL DE PEDIDO*\n\n` +
-        `*Cliente:* ${order.clientName}\n` +
-        `*Teléfono:* ${order.clientPhone}\n` +
-        `*Fecha:* ${order.eventDate}\n` +
-        `*Tipo Evento:* ${order.eventType}\n` +
-        `*Porciones:* ${order.portions}\n` +
-        `*Sabor de Pan:* ${order.flavor}\n` +
-        `*Relleno:* ${order.filling}\n` +
-        `*Betún:* ${order.frosting}\n` +
-        `*Método Entrega:* ${order.deliveryMethod}\n` +
-        `*Logística:* ${order.deliveryDetails}\n` +
-        `*Detalles:* ${order.eventDetails || 'Sin especificaciones extra'}\n\n` +
-        `*FINANZAS:*\n` +
-        `- Total: $${(order.totalPrice || 0).toFixed(2)}\n` +
-        `- Anticipo: $${(order.anticipo || 0).toFixed(2)}\n` +
-        `- Restante: $${restante.toFixed(2)}`;
+    `📋 *RESUMEN OFICIAL DE PEDIDO*\n\n` +
+    `👤 *Cliente:* ${order.clientName}\n` +
+    `📱 *Teléfono:* ${order.clientPhone}\n` +
+    `📅 *Fecha:* ${order.eventDate}\n` +
+    `🎉 *Tipo de Evento:* ${order.eventType}\n\n` +
+    `*DETALLE DEL PEDIDO:*\n` +
+    `Porciones: ${order.portions}\n` +
+    `Pan: ${order.flavor}\n` +
+    `Relleno: ${order.filling}\n` +
+    `Betún: ${order.frosting}\n\n` +
+    `🚚 *MÉTODO DE ENTREGA:* ${order.deliveryMethod}\n` +
+    `📍 *LOGÍSTICA:* ${order.deliveryDetails}\n\n` +
+    `🎨 *DETALLES:*\n` +
+    `${order.eventDetails || 'Sin especificaciones extra'}\n\n` +
+    `💰 *FINANZAS:*\n` +
+    `Total: $${(order.totalPrice || 0).toFixed(2)}\n` +
+    `Anticipo: $${(order.anticipo || 0).toFixed(2)}\n` +
+    `Restante: $${restante.toFixed(2)}`;
 
     document.getElementById('summaryTextarea').value = txt;
 
