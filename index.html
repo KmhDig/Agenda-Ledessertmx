@@ -2606,21 +2606,26 @@ function sendOrderReminderWA(orderId) {
         ? `\n*UBICACIÓN:* ${branch.map}`
         : '';
 
-    const text = `Hola ${order.clientName}, te escribimos para recordar la fecha y la logística de tu entrega de pedido:
+    const text =
+    `👤 Hola ${order.clientName}, te escribimos para recordar la fecha y la logística de tu entrega de pedido:\n\n` +
+    `📅 *FECHA DE ENTREGA:* ${order.eventDate}\n` +
+    `🎉 *EVENTO:* ${order.eventType}\n\n` +
+    `🍰 *DETALLE DEL PEDIDO:*\n` +
+    `Porciones: ${order.portions}\n` +
+    `Pan: ${order.flavor}\n` +
+    `Relleno: ${order.filling}\n` +
+    `Betún: ${order.frosting}\n\n` +
+    `🚚 *MÉTODO DE ENTREGA:* ${order.deliveryMethod}\n` +
+    `📍 *LOGÍSTICA/HORARIO:* ${order.deliveryDetails}${mapInfo}\n\n` +
+    `${restante > 0
+        ? `💰 *RESTANTE PENDIENTE:* $${restante.toFixed(2)}`
+        : `✅ *PAGO:* Liquidado`}\n\n` +
+    `Cualquier detalle o ajuste, quedamos con gusto a tus órdenes. ¡Muchas gracias!`;
 
-*FECHA DE ENTREGA:* ${order.eventDate}
-*EVENTO:* ${order.eventType}
-*DETALLE DEL PEDIDO:* ${order.portions}, Pan ${order.flavor}, Relleno ${order.filling}, Betún ${order.frosting}
-*MÉTODO DE ENTREGA:* ${order.deliveryMethod}
-*LOGÍSTICA/HORARIO:* ${order.deliveryDetails}${mapInfo}
-${restante > 0 ? `*RESTANTE PENDIENTE:* $${restante.toFixed(2)}` : '*PAGO:* Liquidado'}
-
-Cualquier detalle o ajuste, quedamos con gusto a tus órdenes. ¡Muchas gracias!`;
-
-    window.open(
-        `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`,
-        '_blank'
-    );
+window.open(
+    `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`,
+    '_blank'
+);
 
     showToast(
         'Redirigiendo a WhatsApp con Recordatorio de Pedido',
@@ -2635,10 +2640,11 @@ Cualquier detalle o ajuste, quedamos con gusto a tus órdenes. ¡Muchas gracias!
 
     const cleanPhone = String(order.clientPhone || '').replace(/\D/g, '');
 
-    const text = `Hola ${order.clientName}, te saludamos te compartimos este mensaje para pedirte de favor ¿Si nos podrías apoyar enviándonos el comprobante de pago de tu anticipo por este medio para registrar tu fecha de entrega oficialmente en nuestra agenda de producción? 
+    const text = `👤 Hola ${order.clientName}, ¿nos podrías enviar por este medio el comprobante de pago de tu anticipo?
 
-Muchas gracias. ¡Quedamos muy atentos y muchas gracias por tu confianza!`;
+📋 Con esto podremos registrar oficialmente tu fecha en nuestra agenda de producción.
 
+¡Muchas gracias! Quedamos atentos.`;
     window.open(
         `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`,
         '_blank'
