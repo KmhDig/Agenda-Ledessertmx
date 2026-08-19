@@ -1880,8 +1880,7 @@ actualizarFinanzasEnGoogleSheets(pendingOrderData);
 renderOrders();
 renderKitchenOrders();
 
-          const detallesFormateados = (pendingOrderData.eventDetails || 'Ninguno')
-    .replace(/\r?\n/g, '%0A');
+          const detallesFormateados = pendingOrderData.eventDetails || 'Ninguno';
 
 let informacionEntrega = '';
 
@@ -1894,38 +1893,50 @@ if (pendingOrderData.deliveryMethod === 'Recoger en tienda') {
     );
 
     informacionEntrega =
-        `🏬 *Sucursal:* ${pendingOrderData.branchName}%0A` +
-        (pendingOrderData.branchAddress
-            ? `📍 *Dirección:* ${pendingOrderData.branchAddress}%0A`
-            : '') +
-        (sucursal?.map
-            ? `🔗 *Google Maps:* ${sucursal.map}%0A`
-            : '') +
-        `🕐 *Horario:* ${pendingOrderData.pickupTime || 'No especificado'}%0A`;
+        `🏬 *Sucursal:* ${pendingOrderData.branchName}\n`;
+
+    if (pendingOrderData.branchAddress) {
+        informacionEntrega +=
+            `📍 *Dirección:* ${pendingOrderData.branchAddress}\n`;
+    }
+
+    if (sucursal && sucursal.map) {
+        informacionEntrega +=
+            `🔗 *Google Maps:* ${sucursal.map}\n`;
+    }
+
+    informacionEntrega +=
+        `🕐 *Horario:* ${pendingOrderData.pickupTime || 'No especificado'}\n`;
 
 } else {
 
     informacionEntrega =
-        `📍 *Dirección:* ${pendingOrderData.address || 'No especificada'}%0A` +
-        `👤 *Recibe:* ${pendingOrderData.receiver || 'No especificado'}%0A` +
-        `🕐 *Horario:* ${pendingOrderData.deliveryTime || 'No especificado'}%0A`;
+        `📍 *Dirección:* ${pendingOrderData.address || 'No especificada'}\n` +
+        `👤 *Recibe:* ${pendingOrderData.receiver || 'No especificado'}\n` +
+        `🕐 *Horario:* ${pendingOrderData.deliveryTime || 'No especificado'}\n`;
 }
 
-const msg = `*SOLICITUD DE PEDIDO*%0A%0A` +
-    `👤 *Cliente:* ${pendingOrderData.clientName}%0A` +
-    `📱 *Teléfono:* ${pendingOrderData.clientPhone}%0A` +
-    `📅 *Fecha Evento:* ${pendingOrderData.eventDate}%0A` +
-    `🎉 *Tipo Evento:* ${pendingOrderData.eventType}%0A` +
-    `*Porciones:* ${pendingOrderData.portions}%0A` +
-    `*Pan:* ${pendingOrderData.flavor}%0A` +
-    `*Relleno:* ${pendingOrderData.filling}%0A` +
-    `*Betún:* ${pendingOrderData.frosting}%0A` +
-    `🚚 *Método Entrega:* ${pendingOrderData.deliveryMethod}%0A` +
+
+const msg =
+    `*SOLICITUD DE PEDIDO*\n\n` +
+    `👤 *Cliente:* ${pendingOrderData.clientName}\n` +
+    `📱 *Teléfono:* ${pendingOrderData.clientPhone}\n` +
+    `📅 *Fecha Evento:* ${pendingOrderData.eventDate}\n` +
+    `🎉 *Tipo Evento:* ${pendingOrderData.eventType}\n` +
+    `*Porciones:* ${pendingOrderData.portions}\n` +
+    `*Pan:* ${pendingOrderData.flavor}\n` +
+    `*Relleno:* ${pendingOrderData.filling}\n` +
+    `*Betún:* ${pendingOrderData.frosting}\n` +
+    `🚚 *Método Entrega:* ${pendingOrderData.deliveryMethod}\n` +
     informacionEntrega +
-    `🎨 *Detalles Adicionales:*%0A${detallesFormateados}`;
+    `\n🎨 *Detalles Adicionales:*\n` +
+    detallesFormateados;
+
 
 const waNumber = state.businessPhone.replace(/\D/g, '');
-const waUrl = `https://wa.me/${waNumber}?text=${msg}`;
+
+const waUrl =
+    `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
             
 
            closeReviewModal();
