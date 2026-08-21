@@ -383,7 +383,37 @@ background-repeat:no-repeat;">
                     <input type="date" id="eventDate" required onchange="checkDateAvailability()" class="w-full input-canva">
                     <p id="dateWarning" class="text-xs text-rose-600 font-semibold hidden"></p>
                 </div>
+                
+<!-- SOLICITAR DISEÑO -->
+<div id="designIdeaContainer" class="p-4 bg-stone-50  border border-stone-200/60 rounded-2xl text-center space-y-2">
 
+    <p class="text-xs font-medium text-brand-700 ">
+        🎨 <strong>¿Tienes alguna idea para tu pastel?</strong>
+    </p>
+
+    <p class="text-[11px] text-brand-700  leading-relaxed">
+    <span class="font-semibold">1. Completa primero:</span>
+    nombre, WhatsApp, fecha y tipo de evento.
+    <br>
+    <span class="font-semibold">2. Después:</span>
+    envíanos tu idea o una foto de referencia por WhatsApp
+    y continúa con tu pedido.
+</p>
+
+    <button
+        type="button"
+        onclick="sendDesignIdeaWhatsApp()"
+        class="inline-flex items-center justify-center gap-2
+               bg-brand-500 hover:bg-brand-600  
+               text-white font-semibold text-xs
+               px-5 py-2.5 rounded-xl shadow transition">
+
+        <i class="fa-brands fa-whatsapp"></i>
+        Enviar idea o foto por WhatsApp
+
+    </button>
+
+</div>
                 <!-- Tipo de Evento -->
                 <div class="space-y-2">
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-600">
@@ -391,6 +421,7 @@ background-repeat:no-repeat;">
                     </label>
                     <select id="eventType" required class="w-full input-canva font-medium"></select>
                 </div>
+                
 
                
                 <!-- Porciones / Tamaño -->
@@ -3577,6 +3608,47 @@ function toggleEditDeliveryFields() {
         function closeEditFormModal() {
     document.getElementById('editFormModal').classList.add('hidden');
     document.getElementById('editFormModal').classList.remove('flex');
+}
+     // SOLICITAR DISEÑO POR WHATSAPP
+function sendDesignIdeaWhatsApp() {
+
+    const name =
+        document.getElementById('clientName')?.value.trim() || '';
+
+    const phone =
+        document.getElementById('clientPhone')?.value.trim() || '';
+
+    const eventType =
+        document.getElementById('eventType')?.value || '';
+
+    const eventDate =
+        document.getElementById('eventDate')?.value || '';
+
+    const targetPhone =
+        String(state.businessPhone || '').replace(/\D/g, '');
+
+    if (!targetPhone) {
+        showToast(
+            'No hay un WhatsApp configurado en Administración',
+            'error'
+        );
+        return;
+    }
+
+    const msg =
+`🎨 *SOLICITUD DE DISEÑO*
+
+👤 *Cliente:* ${name}
+📱 *WhatsApp:* ${phone}
+📅 *Fecha del evento:* ${eventDate || 'No especificada'}
+🎉 *Evento:* ${eventType}
+
+Hola, quisiera compartirles una foto de referencia o una idea para el diseño de mi pastel. ¿Me pueden ayudar?`;
+
+    const waUrl =
+        `https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`;
+
+    window.open(waUrl, '_blank');
 }
 
 // ============================================
