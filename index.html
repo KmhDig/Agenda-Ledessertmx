@@ -1458,6 +1458,7 @@ function closeImage() {
     renderSocialLinks();
     renderBranches();
     renderBlockedDates();
+    renderOrderDaysAdmin();
 
     cargarConfiguracionDesdeGoogleSheets();
     cargarPedidosDesdeGoogleSheets();
@@ -1538,7 +1539,7 @@ if (config.branches) {
             state.privateMessageTemplate = config.privateMessageTemplate;
         }
 
-        if (config.blockedDates) {
+      if (config.blockedDates) {
     state.blockedDates = config.blockedDates.map(fecha => {
         if (!fecha) return '';
 
@@ -1551,15 +1552,23 @@ if (config.branches) {
         return String(fecha).substring(0, 10);
     }).filter(Boolean);
 }
+        // Cargar días permitidos para recibir pedidos
+if (config.orderDays) {
+    state.orderDays = {
+        ...state.orderDays,
+        ...config.orderDays
+    };
+}
 
-        saveAppState();
+saveAppState();
 
-        initFormCatalogs();
-        renderSocialLinks();
-        renderBranches();
-       renderBlockedDates();
+initFormCatalogs();
+renderSocialLinks();
+renderBranches();
+renderBlockedDates();
+renderOrderDaysAdmin();
 
-        console.log('Configuración cargada desde Google Sheets');
+console.log('Configuración cargada desde Google Sheets');
 
     } catch (error) {
         console.error('Error cargando configuración desde Google Sheets:', error);
