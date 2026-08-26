@@ -1221,7 +1221,18 @@ Notas adicionales:"></textarea>
                 tiktok: 'https://tiktok.com'
             },
             privateMessageTemplate: '¡Hola! Muchas gracias por tu anticipo. Te compartimos la dirección privada para la entrega de tu pedido: Calle Olmo #405, Col. Jardines, Mty. ¡Te esperamos!',
-            blockedDates: [],
+           blockedDates: [],
+
+           orderDays: {
+           lunes: true,
+           martes: true,
+           miercoles: true,
+           jueves: true,
+           viernes: true,
+           sabado: true,
+           domingo: false
+            },
+
             branches: [
                 { id: 1, name: 'Sucursal Matriz - San Pedro', address: 'Av. Vasconcelos #120, SPGG', map: 'https://maps.google.com' }
             ],
@@ -2163,7 +2174,8 @@ guardarConfiguracionEnGoogleSheets();
         catalogs: state.catalogs,
         privateMessageTemplate: state.privateMessageTemplate,
         blockedDates: state.blockedDates,
-        pin: state.pin,
+         orderDays: state.orderDays,
+         pin: state.pin,
         emailPrimary: state.emailPrimary,
         emailSecondary: state.emailSecondary
     };
@@ -2394,6 +2406,77 @@ function addCatalogOption(key, inputId) {
                 container.appendChild(chip);
             });
         }
+     // ==========================================
+// DÍAS PARA RECIBIR PEDIDOS
+// ==========================================
+
+const ORDER_DAY_NAMES = {
+    lunes: 'Lunes',
+    martes: 'Martes',
+    miercoles: 'Miércoles',
+    jueves: 'Jueves',
+    viernes: 'Viernes',
+    sabado: 'Sábado',
+    domingo: 'Domingo'
+};
+
+function renderOrderDaysAdmin() {
+    const container = document.getElementById('orderDaysAdminList');
+
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    Object.entries(ORDER_DAY_NAMES).forEach(([key, label]) => {
+
+        const activo = state.orderDays?.[key] !== false;
+
+        const labelElement = document.createElement('label');
+
+        labelElement.className =
+            'flex items-center gap-2 p-3 rounded-xl border border-stone-200 bg-stone-50 hover:bg-teal-50 cursor-pointer transition';
+
+        labelElement.innerHTML = `
+            <input
+                type="checkbox"
+                class="order-day-checkbox w-4 h-4 accent-brand-500"
+                data-day="${key}"
+                ${activo ? 'checked' : ''}
+            >
+
+            <span class="text-xs font-bold text-stone-700">
+                ${label}
+            </span>
+        `;
+
+        container.appendChild(labelElement);
+    });
+}
+
+
+function saveOrderDays() {
+
+    if (!state.orderDays) {
+        state.orderDays = {};
+    }
+
+    document.querySelectorAll('.order-day-checkbox').forEach(checkbox => {
+
+        const day = checkbox.dataset.day;
+
+        state.orderDays[day] = checkbox.checked;
+
+    });
+
+    saveAppState();
+
+    guardarConfiguracionEnGoogleSheets();
+
+    showToast(
+        'Días para recibir pedidos guardados correctamente',
+        'success'
+    );
+}
 
         // HISTORIAL DE PEDIDOS (Estatus de Finanzas en lugar de Estatus de Cocina)
         function getFinanceStatusBadge(order) {
