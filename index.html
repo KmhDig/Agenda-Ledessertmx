@@ -1223,15 +1223,15 @@ Notas adicionales:"></textarea>
             privateMessageTemplate: '¡Hola! Muchas gracias por tu anticipo. Te compartimos la dirección privada para la entrega de tu pedido: Calle Olmo #405, Col. Jardines, Mty. ¡Te esperamos!',
            blockedDates: [],
 
-           orderDays: {
-           lunes: true,
-           martes: true,
-           miercoles: true,
-           jueves: true,
-           viernes: true,
-           sabado: true,
-           domingo: false
-            },
+          orderDays: {
+         lunes: true,
+         martes: true,
+         miercoles: true,
+         jueves: true,
+         viernes: true,
+        sabado: true,
+        domingo: true
+        },
 
             branches: [
                 { id: 1, name: 'Sucursal Matriz - San Pedro', address: 'Av. Vasconcelos #120, SPGG', map: 'https://maps.google.com' }
@@ -1755,6 +1755,32 @@ function showToast(message, type = 'info') {
                 showToast('La fecha seleccionada no está disponible. Elige otra fecha.', 'error');
                 return;
             }
+            // ============================================
+// VALIDAR DÍA PARA RECIBIR PEDIDOS
+// ============================================
+const hoy = new Date();
+
+const diasSemana = [
+    'domingo',
+    'lunes',
+    'martes',
+    'miercoles',
+    'jueves',
+    'viernes',
+    'sabado'
+];
+
+const diaActual = diasSemana[hoy.getDay()];
+
+if (state.orderDays && state.orderDays[diaActual] === false) {
+
+    showToast(
+        'Hoy no estamos recibiendo pedidos. Por favor intenta nuevamente en un día disponible.',
+        'error'
+    );
+
+    return;
+}
 
             const clientName = document.getElementById('clientName').value.trim();
             const clientPhone = document.getElementById('clientPhone').value.trim();
