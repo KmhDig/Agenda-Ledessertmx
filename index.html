@@ -2113,14 +2113,18 @@ function renderAvailabilityCalendar() {
     console.log('CALENDARIO EJECUTÁNDOSE');
 
     const grid =
-        document.getElementById('availabilityCalendarGrid');
+    document.getElementById('availabilityCalendarGrid');
 
-    const monthTitle =
-        document.getElementById('availabilityCalendarMonth');
+const monthTitle =
+    document.getElementById('availabilityCalendarMonth');
 
-    if (!grid || !monthTitle) {
-        return;
-    }
+console.log('GRID:', grid);
+console.log('TÍTULO:', monthTitle);
+
+if (!grid || !monthTitle) {
+    console.log('NO ENCONTRÓ EL CALENDARIO');
+    return;
+}
 
     const year =
         availabilityCalendarMonth.getFullYear();
