@@ -2365,9 +2365,10 @@ function selectAvailabilityDate(key) {
 
     selectedAvailabilityDate = key;
 
-    const status =
-        availabilityStatusForDate(key);
+   const status =
+    availabilityStatusForDate(key);
 
+console.log('FECHA:', key, 'ESTADO:', status);
     const detail =
         document.getElementById(
             'availabilityCalendarDetail'
