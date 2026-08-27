@@ -1808,15 +1808,46 @@ function showToast(message, type = 'info') {
 }
 
         function checkDateAvailability() {
-            const inputDate = document.getElementById('eventDate').value;
-            const warningEl = document.getElementById('dateWarning');
-            if (state.blockedDates.includes(inputDate)) {
-                warningEl.textContent = '⚠️ Esta fecha está completamente llena en agenda. Elige otro día o contáctanos directamente.';
-                warningEl.classList.remove('hidden');
-            } else {
-                warningEl.classList.add('hidden');
-            }
-        }
+
+    const inputDate =
+        document.getElementById('eventDate').value;
+
+    const warningEl =
+        document.getElementById('dateWarning');
+
+    if (!inputDate) {
+        warningEl.classList.add('hidden');
+        return;
+    }
+
+    // 🔴 FECHA COMPLETAMENTE BLOQUEADA
+    if (state.blockedDates.includes(inputDate)) {
+
+        warningEl.textContent =
+            '🔴 Esta fecha está completamente llena en agenda. Elige otra fecha disponible.';
+
+        warningEl.classList.remove('hidden');
+
+        return;
+    }
+
+    // 🟡 FECHA CON POCA DISPONIBILIDAD
+    if (
+        state.limitedDates &&
+        state.limitedDates.includes(inputDate)
+    ) {
+
+        warningEl.textContent =
+            '🟡 Esta fecha tiene poca disponibilidad. Te recomendamos confirmar tu pedido lo antes posible.';
+
+        warningEl.classList.remove('hidden');
+
+        return;
+    }
+
+    // 🟢 FECHA DISPONIBLE
+    warningEl.classList.add('hidden');
+}
 
         // GESTIÓN DEL FORMULARIO Y CONFIRMACIÓN POR EL CLIENTE
         let pendingOrderData = null;
