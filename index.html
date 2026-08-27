@@ -1892,6 +1892,52 @@ function availabilityStatusForDate(key) {
     // 🟢 DISPONIBLE
     return 'available';
 }
+     // ============================================
+// CALENDARIO DE DISPONIBILIDAD DEL CLIENTE
+// ============================================
+
+let availabilityCalendarMonth =
+    new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+
+let selectedAvailabilityDate = '';
+
+const AVAILABILITY_MONTHS = [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre'
+];
+
+function normalizeDateKey(date) {
+
+    const d = new Date(date);
+
+    if (Number.isNaN(d.getTime())) {
+        return '';
+    }
+
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function dateFromKey(key) {
+
+    const [year, month, day] =
+        String(key).split('-').map(Number);
+
+    return new Date(
+        year,
+        (month || 1) - 1,
+        day || 1
+    );
+}
 
         // GESTIÓN DEL FORMULARIO Y CONFIRMACIÓN POR EL CLIENTE
         let pendingOrderData = null;
