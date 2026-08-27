@@ -1935,11 +1935,11 @@ function closeImage() {
     toggleDeliveryFields();
     renderSocialLinks();
     renderBranches();
-
     renderBlockedDates();
     renderLimitedDates();
     renderOrderDaysAdmin();
 
+    updateOrderAvailabilityStatus();
     renderAvailabilityCalendar();
 
     cargarConfiguracionDesdeGoogleSheets();
@@ -2047,6 +2047,7 @@ renderBranches();
 renderBlockedDates();
 renderLimitedDates();
 renderOrderDaysAdmin();
+updateOrderAvailabilityStatus();
 renderAvailabilityCalendar();
 
 console.log('Configuración cargada desde Google Sheets');
@@ -2543,6 +2544,90 @@ function changeAvailabilityMonth(delta) {
 
     renderAvailabilityCalendar();
 }
+  // ============================================
+// ESTADO DE PEDIDOS DEL DÍA ACTUAL
+// ============================================
+
+function updateOrderAvailabilityStatus() {
+
+    const box =
+        document.getElementById('orderAvailabilityStatus');
+
+    const icon =
+        document.querySelector('.order-availability-icon');
+
+    const title =
+        document.getElementById('orderAvailabilityTitle');
+
+    const message =
+        document.getElementById('orderAvailabilityMessage');
+
+    if (!box || !icon || !title || !message) {
+        return;
+    }
+
+    const diasSemana = [
+        'domingo',
+        'lunes',
+        'martes',
+        'miercoles',
+        'jueves',
+        'viernes',
+        'sabado'
+    ];
+
+    const hoy = new Date();
+
+    const diaActual =
+        diasSemana[hoy.getDay()];
+
+    // ============================================
+    // REVISAR SI HOY ESTÁ ABIERTO
+    // ============================================
+
+    const estaAbierto =
+        !state.orderDays ||
+        state.orderDays[diaActual] !== false;
+
+    // ============================================
+    // 🟢 DÍA ABIERTO
+    // ============================================
+
+    if (estaAbierto) {
+
+        box.classList.remove('is-closed');
+        box.classList.add('is-open');
+
+        icon.innerHTML =
+            '<i class="fa-solid fa-circle-check"></i>';
+
+        title.innerHTML =
+            '<span class="order-status-dot"></span>' +
+            '<span>Estamos recibiendo pedidos</span>';
+
+        message.textContent =
+            'Hoy puedes enviar tu pedido. Te recomendamos apartar tu fecha con anticipación.';
+
+        return;
+    }
+
+    // ============================================
+    // 🌙 DÍA CERRADO
+    // ============================================
+
+    box.classList.remove('is-open');
+    box.classList.add('is-closed');
+
+    icon.innerHTML =
+        '<i class="fa-solid fa-moon"></i>';
+
+    title.innerHTML =
+        '<span class="order-status-dot"></span>' +
+        '<span>Pedidos cerrados por ahora</span>';
+
+    message.textContent =
+        'Hoy no estamos recibiendo pedidos. Consulta nuestro calendario para elegir otra fecha disponible.';
+}   
 
 
 // ============================================
