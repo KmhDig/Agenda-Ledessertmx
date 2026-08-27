@@ -374,6 +374,134 @@ background-repeat:no-repeat;">
                     </label>
                     <input type="tel" id="clientPhone" required placeholder="Ej. 81 2345 6789" class="w-full input-canva">
                 </div>
+                <!-- ============================================
+     CALENDARIO DE DISPONIBILIDAD
+     ============================================ -->
+
+<div id="availabilityCalendar" class="availability-calendar">
+
+    <div class="availability-calendar-head">
+
+        <div class="availability-calendar-title">
+
+            <span class="availability-calendar-icon">
+                <i class="fa-regular fa-calendar-days"></i>
+            </span>
+
+            <div>
+                <div class="text-[11px] font-extrabold uppercase tracking-[.12em] text-brand-700">
+                    Disponibilidad de fechas
+                </div>
+
+                <div class="availability-calendar-sub">
+                    Consulta tu fecha antes de comenzar tu pedido
+                </div>
+            </div>
+
+        </div>
+
+        <div class="flex items-center gap-1.5">
+
+            <button
+                type="button"
+                class="availability-calendar-nav"
+                onclick="changeAvailabilityMonth(-1)"
+                aria-label="Mes anterior">
+
+                <i class="fa-solid fa-chevron-left text-[10px]"></i>
+
+            </button>
+
+            <button
+                type="button"
+                class="availability-calendar-nav"
+                onclick="changeAvailabilityMonth(1)"
+                aria-label="Mes siguiente">
+
+                <i class="fa-solid fa-chevron-right text-[10px]"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="flex items-center justify-center mt-3">
+
+        <div
+            id="availabilityCalendarMonth"
+            class="availability-calendar-month">
+        </div>
+
+    </div>
+
+
+    <div class="availability-week">
+
+        <span>Lun</span>
+        <span>Mar</span>
+        <span>Mié</span>
+        <span>Jue</span>
+        <span>Vie</span>
+        <span>Sáb</span>
+        <span>Dom</span>
+
+    </div>
+
+
+    <div
+        id="availabilityCalendarGrid"
+        class="availability-grid">
+    </div>
+
+
+    <div class="availability-legend">
+
+        <span class="availability-legend-item">
+            <i
+                class="availability-legend-dot"
+                style="background:#10b981">
+            </i>
+            Disponible
+        </span>
+
+        <span class="availability-legend-item">
+            <i
+                class="availability-legend-dot"
+                style="background:#f59e0b">
+            </i>
+            Poca disponibilidad
+        </span>
+
+        <span class="availability-legend-item">
+            <i
+                class="availability-legend-dot"
+                style="background:#ef4444">
+            </i>
+            Agenda llena
+        </span>
+
+        <span class="availability-legend-item">
+            <i
+                class="availability-legend-dot"
+                style="background:#a8a29e">
+            </i>
+            Cerrado
+        </span>
+
+    </div>
+
+
+    <div
+        id="availabilityCalendarDetail"
+        class="availability-detail">
+
+        Selecciona una fecha para consultar su disponibilidad.
+
+    </div>
+
+</div>
 
                 <!-- Fecha del Evento -->
                 <div class="space-y-2">
