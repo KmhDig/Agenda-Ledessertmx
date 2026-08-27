@@ -1979,6 +1979,7 @@ function showToast(message, type = 'info') {
     // 🟢 FECHA DISPONIBLE
     warningEl.classList.add('hidden');
 }
+    
      // ============================================
 // ESTADO DE DISPONIBILIDAD DE UNA FECHA
 // ============================================
@@ -2022,8 +2023,8 @@ function availabilityStatusForDate(key) {
     // 🟢 DISPONIBLE
     return 'available';
 }
-     // ============================================
-// CALENDARIO DE DISPONIBILIDAD DEL CLIENTE
+ // ============================================
+// CALENDARIO DE DISPONIBILIDAD
 // ============================================
 
 let availabilityCalendarMonth =
@@ -2046,6 +2047,24 @@ const AVAILABILITY_MONTHS = [
     'Diciembre'
 ];
 
+// ============================================
+// DÍAS DE LA SEMANA PARA EL CALENDARIO
+// ============================================
+
+const ORDER_DAY_KEYS = [
+    'domingo',
+    'lunes',
+    'martes',
+    'miercoles',
+    'jueves',
+    'viernes',
+    'sabado'
+];
+
+// ============================================
+// CONVERTIR FECHA A YYYY-MM-DD
+// ============================================
+
 function normalizeDateKey(date) {
 
     const d = new Date(date);
@@ -2057,16 +2076,66 @@ function normalizeDateKey(date) {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+// ============================================
+// CONVERTIR YYYY-MM-DD A FECHA
+// ============================================
+
 function dateFromKey(key) {
 
-    const [year, month, day] =
+    const [y, m, d] =
         String(key).split('-').map(Number);
 
     return new Date(
-        year,
-        (month || 1) - 1,
-        day || 1
+        y,
+        (m || 1) - 1,
+        d || 1
     );
+}
+
+// ============================================
+// ESTADO DE DISPONIBILIDAD DE UNA FECHA
+// ============================================
+
+function availabilityStatusForDate(key) {
+
+    // 🔴 AGENDA LLENA
+    if (state.blockedDates.includes(key)) {
+        return 'full';
+    }
+
+    // 🟡 POCA DISPONIBILIDAD
+    if (
+        state.limitedDates &&
+        state.limitedDates.includes(key)
+    ) {
+        return 'limited';
+    }
+
+    // Revisar día de la semana
+    const date = dateFromKey(key);
+
+    const dayKey =
+        ORDER_DAY_KEYS[date.getDay()];
+
+    // Si ese día no está habilitado
+    // en Administración → cerrado
+    if (
+        state.orderDays &&
+        state.orderDays[dayKey] === false
+    ) {
+        return 'closed';
+    }
+
+    // Fechas anteriores a hoy
+    const todayKey =
+        normalizeDateKey(new Date());
+
+    if (key < todayKey) {
+        return 'closed';
+    }
+
+    // 🟢 DISPONIBLE
+    return 'available';
 }
      // ============================================
 // CAMBIAR MES DEL CALENDARIO
