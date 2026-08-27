@@ -1979,6 +1979,19 @@ function showToast(message, type = 'info') {
     // 🟢 FECHA DISPONIBLE
     warningEl.classList.add('hidden');
 }
+     // ============================================
+// DÍAS DE LA SEMANA PARA EL CALENDARIO
+// ============================================
+
+const ORDER_DAY_KEYS = [
+    'domingo',
+    'lunes',
+    'martes',
+    'miercoles',
+    'jueves',
+    'viernes',
+    'sabado'
+];
     
      // ============================================
 // ESTADO DE DISPONIBILIDAD DE UNA FECHA
@@ -2023,9 +2036,9 @@ function availabilityStatusForDate(key) {
     // 🟢 DISPONIBLE
     return 'available';
 }
- // ============================================
+// ============================================================
 // CALENDARIO DE DISPONIBILIDAD
-// ============================================
+// ============================================================
 
 let availabilityCalendarMonth =
     new Date(new Date().getFullYear(), new Date().getMonth(), 1);
@@ -2047,6 +2060,7 @@ const AVAILABILITY_MONTHS = [
     'Diciembre'
 ];
 
+
 // ============================================
 // DÍAS DE LA SEMANA PARA EL CALENDARIO
 // ============================================
@@ -2060,6 +2074,7 @@ const ORDER_DAY_KEYS = [
     'viernes',
     'sabado'
 ];
+
 
 // ============================================
 // CONVERTIR FECHA A YYYY-MM-DD
@@ -2075,6 +2090,7 @@ function normalizeDateKey(date) {
 
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
+
 
 // ============================================
 // CONVERTIR YYYY-MM-DD A FECHA
@@ -2092,6 +2108,7 @@ function dateFromKey(key) {
     );
 }
 
+
 // ============================================
 // ESTADO DE DISPONIBILIDAD DE UNA FECHA
 // ============================================
@@ -2099,7 +2116,10 @@ function dateFromKey(key) {
 function availabilityStatusForDate(key) {
 
     // 🔴 AGENDA LLENA
-    if (state.blockedDates.includes(key)) {
+    if (
+        state.blockedDates &&
+        state.blockedDates.includes(key)
+    ) {
         return 'full';
     }
 
@@ -2111,19 +2131,24 @@ function availabilityStatusForDate(key) {
         return 'limited';
     }
 
-    // Revisar día de la semana
+    // ⚪ REVISAR DÍA DE ATENCIÓN
     const date = dateFromKey(key);
 
     const dayKey =
         ORDER_DAY_KEYS[date.getDay()];
 
-    // Si ese día no está habilitado
-    // en Administración → cerrado
-    if (
-        state.orderDays &&
-        state.orderDays[dayKey] === false
-    ) {
-        return 'closed';
+    // Si tienes orderHours configurado
+    if (state.orderHours) {
+
+        const schedule =
+            state.orderHours[dayKey];
+
+        if (
+            !schedule ||
+            schedule.activo === false
+        ) {
+            return 'closed';
+        }
     }
 
     // Fechas anteriores a hoy
@@ -2137,34 +2162,116 @@ function availabilityStatusForDate(key) {
     // 🟢 DISPONIBLE
     return 'available';
 }
-     // ============================================
+
+
+// ============================================
+// SELECCIONAR FECHA
+// ============================================
+
+function selectAvailabilityDate(key) {
+
+    selectedAvailabilityDate = key;
+
+    const status =
+        availabilityStatusForDate(key);
+
+    const detail =
+        document.getElementById(
+            'availabilityCalendarDetail'
+        );
+
+    const input =
+        document.getElementById('eventDate');
+
+    const mensajes = {
+
+        available:
+            '🟢 Disponible · Puedes solicitar esta fecha.',
+
+        limited:
+            '🟡 Poca disponibilidad · Te recomendamos confirmar tu pedido pronto.',
+
+        full:
+            '🔴 Agenda llena · Ya no estamos aceptando pedidos para esta fecha.',
+
+        closed:
+            '⚪ Día no laborable o fecha no disponible para pedidos.'
+    };
+
+    const fecha =
+        dateFromKey(key).toLocaleDateString(
+            'es-MX',
+            {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            }
+        );
+
+    if (detail) {
+
+        detail.innerHTML =
+            `<strong>${fecha}</strong><br>${mensajes[status]}`;
+    }
+
+    // 🟢 Y 🟡 SÍ SE PUEDEN SELECCIONAR
+    if (
+        status === 'available' ||
+        status === 'limited'
+    ) {
+
+        if (input) {
+
+            input.value = key;
+
+            input.dispatchEvent(
+                new Event('change', {
+                    bubbles: true
+                })
+            );
+        }
+    }
+
+    renderAvailabilityCalendar();
+}
+
+
+// ============================================
 // CAMBIAR MES DEL CALENDARIO
 // ============================================
 
 function changeAvailabilityMonth(delta) {
 
-    const next = new Date(availabilityCalendarMonth);
+    const next =
+        new Date(availabilityCalendarMonth);
 
-    next.setMonth(next.getMonth() + delta);
-
-    const min = new Date(
-        new Date().getFullYear(),
-        new Date().getMonth(),
-        1
+    next.setMonth(
+        next.getMonth() + delta
     );
 
-    // No permitir navegar a meses anteriores al actual
+    const min =
+        new Date(
+            new Date().getFullYear(),
+            new Date().getMonth(),
+            1
+        );
+
     if (next < min) {
         return;
     }
 
     availabilityCalendarMonth = next;
+
     selectedAvailabilityDate = '';
 
     const detail =
-        document.getElementById('availabilityCalendarDetail');
+        document.getElementById(
+            'availabilityCalendarDetail'
+        );
 
     if (detail) {
+
         detail.textContent =
             'Selecciona una fecha para consultar su disponibilidad.';
     }
@@ -2182,18 +2289,18 @@ function renderAvailabilityCalendar() {
     console.log('CALENDARIO EJECUTÁNDOSE');
 
     const grid =
-    document.getElementById('availabilityCalendarGrid');
+        document.getElementById(
+            'availabilityCalendarGrid'
+        );
 
-const monthTitle =
-    document.getElementById('availabilityCalendarMonth');
+    const monthTitle =
+        document.getElementById(
+            'availabilityCalendarMonth'
+        );
 
-console.log('GRID:', grid);
-console.log('TÍTULO:', monthTitle);
-
-if (!grid || !monthTitle) {
-    console.log('NO ENCONTRÓ EL CALENDARIO');
-    return;
-}
+    if (!grid || !monthTitle) {
+        return;
+    }
 
     const year =
         availabilityCalendarMonth.getFullYear();
@@ -2207,18 +2314,28 @@ if (!grid || !monthTitle) {
     const first =
         new Date(year, month, 1);
 
-    // El calendario comienza en lunes
-    let start = first.getDay();
+    let start =
+        first.getDay();
 
-    start = start === 0 ? 6 : start - 1;
+    // El calendario comienza en lunes
+    start =
+        start === 0 ? 6 : start - 1;
 
     const daysInMonth =
-        new Date(year, month + 1, 0).getDate();
+        new Date(
+            year,
+            month + 1,
+            0
+        ).getDate();
 
     let html = '';
 
     // Espacios antes del día 1
-    for (let i = 0; i < start; i++) {
+    for (
+        let i = 0;
+        i < start;
+        i++
+    ) {
 
         html += `
             <div class="availability-day is-empty"></div>
@@ -2226,7 +2343,11 @@ if (!grid || !monthTitle) {
     }
 
     // Días del mes
-    for (let day = 1; day <= daysInMonth; day++) {
+    for (
+        let day = 1;
+        day <= daysInMonth;
+        day++
+    ) {
 
         const key =
             `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
@@ -2266,7 +2387,7 @@ if (!grid || !monthTitle) {
         `;
     }
 
-    grid.innerHTML = html; 
+    grid.innerHTML = html;
 }
 
         // GESTIÓN DEL FORMULARIO Y CONFIRMACIÓN POR EL CLIENTE
