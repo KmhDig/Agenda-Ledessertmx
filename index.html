@@ -1531,6 +1531,7 @@ function closeImage() {
     renderSocialLinks();
     renderBranches();
     renderBlockedDates();
+    renderLimitedDates();
     renderOrderDaysAdmin();
 
     cargarConfiguracionDesdeGoogleSheets();
@@ -2546,6 +2547,122 @@ function addCatalogOption(key, inputId) {
                 container.appendChild(chip);
             });
         }
+     // ============================================
+// FECHAS CON POCA DISPONIBILIDAD
+// ============================================
+
+function markLimitedDate() {
+
+    const input =
+        document.getElementById('limitedDateInput');
+
+    if (!input) return;
+
+    const fecha = input.value;
+
+    if (!fecha) {
+        showToast('Selecciona una fecha.', 'error');
+        return;
+    }
+
+    if (!state.limitedDates) {
+        state.limitedDates = [];
+    }
+
+    // No permitir duplicados
+    if (state.limitedDates.includes(fecha)) {
+        showToast(
+            'Esta fecha ya está marcada como poca disponibilidad.',
+            'info'
+        );
+        return;
+    }
+
+    // Si ya está bloqueada, no puede ser poca disponibilidad
+    if (state.blockedDates.includes(fecha)) {
+        showToast(
+            'Esta fecha ya está bloqueada completamente.',
+            'error'
+        );
+        return;
+    }
+
+    state.limitedDates.push(fecha);
+
+    saveAppState();
+    guardarConfiguracionEnGoogleSheets();
+    renderLimitedDates();
+
+    input.value = '';
+
+    showToast(
+        'Fecha marcada como poca disponibilidad.',
+        'success'
+    );
+}
+
+
+function unmarkLimitedDate(fecha) {
+
+    if (!state.limitedDates) return;
+
+    state.limitedDates =
+        state.limitedDates.filter(
+            item => item !== fecha
+        );
+
+    saveAppState();
+    guardarConfiguracionEnGoogleSheets();
+    renderLimitedDates();
+
+    showToast(
+        'Fecha quitada de poca disponibilidad.',
+        'info'
+    );
+}
+
+
+function renderLimitedDates() {
+
+    const container =
+        document.getElementById('limitedDatesList');
+
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    if (
+        !state.limitedDates ||
+        state.limitedDates.length === 0
+    ) {
+        container.innerHTML =
+            '<span class="text-xs text-stone-400">No hay fechas con poca disponibilidad actualmente.</span>';
+
+        return;
+    }
+
+    state.limitedDates.forEach(fecha => {
+
+        const chip =
+            document.createElement('span');
+
+        chip.className =
+            'inline-flex items-center gap-1 bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold border border-amber-200';
+
+        chip.innerHTML = `
+            🟡 ${fecha}
+
+            <button
+                type="button"
+                onclick="unmarkLimitedDate('${fecha}')"
+                class="text-amber-600 hover:text-amber-900 ml-1">
+                ✕
+            </button>
+        `;
+
+        container.appendChild(chip);
+    });
+}
      // ==========================================
 // DÍAS PARA RECIBIR PEDIDOS
 // ==========================================
