@@ -1651,7 +1651,7 @@ function closeImage() {
         }
 
         // INICIALIZACIÓN
-     window.onload = function() {
+    window.onload = function() {
     applyClientConfig();
 
     initFormCatalogs();
@@ -1659,8 +1659,9 @@ function closeImage() {
     renderSocialLinks();
     renderBranches();
     renderBlockedDates();
-    renderLimitedDates();
     renderOrderDaysAdmin();
+
+    renderAvailabilityCalendar();
 
     cargarConfiguracionDesdeGoogleSheets();
     cargarPedidosDesdeGoogleSheets();
@@ -1769,6 +1770,7 @@ renderSocialLinks();
 renderBranches();
 renderBlockedDates();
 renderOrderDaysAdmin();
+renderAvailabilityCalendar();
 
 console.log('Configuración cargada desde Google Sheets');
 
