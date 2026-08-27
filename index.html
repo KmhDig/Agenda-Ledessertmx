@@ -1225,45 +1225,56 @@ Notas adicionales:"></textarea>
 </div>
 
  <script>
-    const DEFAULT_STATE = {
+const DEFAULT_STATE = {
     pin: '1234',
     emailPrimary: 'admin@ejemplo.com',
     emailSecondary: 'soporte@ejemplo.com',
     businessPhone: '520000000000',
-            socials: {
-                instagram: 'https://instagram.com',
-                facebook: 'https://facebook.com',
-                tiktok: 'https://tiktok.com'
-            },
-            privateMessageTemplate: '¡Hola! Muchas gracias por tu anticipo. Te compartimos la dirección privada para la entrega de tu pedido: Calle Olmo #405, Col. Jardines, Mty. ¡Te esperamos!',
-           blockedDates: [],
 
-          orderDays: {
-         lunes: true,
-         martes: true,
-         miercoles: true,
-         jueves: true,
-         viernes: true,
+    socials: {
+        instagram: 'https://instagram.com',
+        facebook: 'https://facebook.com',
+        tiktok: 'https://tiktok.com'
+    },
+
+    privateMessageTemplate: '¡Hola! Muchas gracias por tu anticipo. Te compartimos la dirección privada para la entrega de tu pedido: Calle Olmo #405, Col. Jardines, Mty. ¡Te esperamos!',
+
+    blockedDates: [],
+    limitedDates: [],
+
+    orderDays: {
+        lunes: true,
+        martes: true,
+        miercoles: true,
+        jueves: true,
+        viernes: true,
         sabado: true,
         domingo: true
-        },
+    },
 
-            branches: [
-                { id: 1, name: 'Sucursal Matriz - San Pedro', address: 'Av. Vasconcelos #120, SPGG', map: 'https://maps.google.com' }
-            ],
-            catalogs: {
-                events: ['Cumpleaños', 'Boda', 'XVIII Años', 'Baby Shower', 'Aniversario', 'Graduación', 'Otro'],
-                portions: ['6 a 8 Porciones', '10 a 12 Porciones', '15 a 20 Porciones', '25 a 30 Porciones', '50+ Porciones'],
-                flavors: ['Vainilla Clásica', 'Chocolate Belga', 'Red Velvet', 'Zanahoria & Nuez', 'Limón & Frutos Rojos'],
-                fillings: ['Crema de Nutella', 'Cajeta de Sayula', 'Frutos Rojos Finos', 'Queso Crema Vainilla', 'Ganache de Chocolate'],
-                frostings: ['Mantequilla Fina', 'Philadelphia Special', 'Chocolate Gourmet'],
-                pickupTimes: ['10:00 AM - 12:00 PM', '12:00 PM - 2:00 PM', '2:00 PM - 4:00 PM', '4:00 PM - 6:00 PM'],
-                shippingTimes: ['10:00 AM - 1:00 PM (Turno Mañana)', '2:00 PM - 6:00 PM (Turno Tarde)']
-            },
-            orders: []
-        };
+    branches: [
+        {
+            id: 1,
+            name: 'Sucursal Matriz - San Pedro',
+            address: 'Av. Vasconcelos #120, SPGG',
+            map: 'https://maps.google.com'
+        }
+    ],
 
-        let state = loadAppState();
+    catalogs: {
+        events: ['Cumpleaños', 'Boda', 'XVIII Años', 'Baby Shower', 'Aniversario', 'Graduación', 'Otro'],
+        portions: ['6 a 8 Porciones', '10 a 12 Porciones', '15 a 20 Porciones', '25 a 30 Porciones', '50+ Porciones'],
+        flavors: ['Vainilla Clásica', 'Chocolate Belga', 'Red Velvet', 'Zanahoria & Nuez', 'Limón & Frutos Rojos'],
+        fillings: ['Crema de Nutella', 'Cajeta de Sayula', 'Frutos Rojos Finos', 'Queso Crema Vainilla', 'Ganache de Chocolate'],
+        frostings: ['Mantequilla Fina', 'Philadelphia Special', 'Chocolate Gourmet'],
+        pickupTimes: ['10:00 AM - 12:00 PM', '12:00 PM - 2:00 PM', '2:00 PM - 4:00 PM', '4:00 PM - 6:00 PM'],
+        shippingTimes: ['10:00 AM - 1:00 PM (Turno Mañana)', '2:00 PM - 6:00 PM (Turno Tarde)']
+    },
+
+    orders: []
+};
+
+let state = loadAppState();
 let currentEditingFinanceOrderId = null;
 let kitchenFilter = 'all';
 
