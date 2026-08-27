@@ -1849,6 +1849,49 @@ function showToast(message, type = 'info') {
     // 🟢 FECHA DISPONIBLE
     warningEl.classList.add('hidden');
 }
+     // ============================================
+// ESTADO DE DISPONIBILIDAD DE UNA FECHA
+// ============================================
+function availabilityStatusForDate(key) {
+
+    // 🔴 AGENDA LLENA
+    if (
+        state.blockedDates &&
+        state.blockedDates.includes(key)
+    ) {
+        return 'full';
+    }
+
+    // 🟡 POCA DISPONIBILIDAD
+    if (
+        state.limitedDates &&
+        state.limitedDates.includes(key)
+    ) {
+        return 'limited';
+    }
+
+    // ⚪ DÍA CERRADO
+    const date = dateFromKey(key);
+
+    const dayKey = ORDER_DAY_KEYS[date.getDay()];
+
+    if (
+        state.orderDays &&
+        state.orderDays[dayKey] === false
+    ) {
+        return 'closed';
+    }
+
+    // ⚪ FECHA PASADA
+    const todayKey = normalizeDateKey(new Date());
+
+    if (key < todayKey) {
+        return 'closed';
+    }
+
+    // 🟢 DISPONIBLE
+    return 'available';
+}
 
         // GESTIÓN DEL FORMULARIO Y CONFIRMACIÓN POR EL CLIENTE
         let pendingOrderData = null;
