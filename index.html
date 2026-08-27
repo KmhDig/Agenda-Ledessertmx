@@ -1658,16 +1658,15 @@ function closeImage() {
     toggleDeliveryFields();
     renderSocialLinks();
     renderBranches();
+
     renderBlockedDates();
+    renderLimitedDates();
     renderOrderDaysAdmin();
 
     renderAvailabilityCalendar();
 
     cargarConfiguracionDesdeGoogleSheets();
     cargarPedidosDesdeGoogleSheets();
-
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('eventDate').min = today;
 };
         // ALMACENAMIENTO LOCAL
         function loadAppState() {
@@ -1769,6 +1768,7 @@ initFormCatalogs();
 renderSocialLinks();
 renderBranches();
 renderBlockedDates();
+renderLimitedDates();
 renderOrderDaysAdmin();
 renderAvailabilityCalendar();
 
@@ -3085,12 +3085,13 @@ function markLimitedDate() {
     const input =
         document.getElementById('limitedDateInput');
 
-    if (!input) return;
-
-    const fecha = input.value;
+    const fecha = input?.value;
 
     if (!fecha) {
-        showToast('Selecciona una fecha.', 'error');
+        showToast(
+            'Selecciona una fecha.',
+            'error'
+        );
         return;
     }
 
@@ -3100,19 +3101,26 @@ function markLimitedDate() {
 
     // No permitir duplicados
     if (state.limitedDates.includes(fecha)) {
+
         showToast(
             'Esta fecha ya está marcada como poca disponibilidad.',
             'info'
         );
+
         return;
     }
 
-    // Si ya está bloqueada, no puede ser poca disponibilidad
-    if (state.blockedDates.includes(fecha)) {
+    // Si está bloqueada, primero debe quitarse de bloqueadas
+    if (
+        state.blockedDates &&
+        state.blockedDates.includes(fecha)
+    ) {
+
         showToast(
-            'Esta fecha ya está bloqueada completamente.',
+            'Esta fecha ya está bloqueada como agenda llena.',
             'error'
         );
+
         return;
     }
 
@@ -3120,9 +3128,12 @@ function markLimitedDate() {
 
     saveAppState();
     guardarConfiguracionEnGoogleSheets();
+
     renderLimitedDates();
 
     input.value = '';
+
+    renderAvailabilityCalendar();
 
     showToast(
         'Fecha marcada como poca disponibilidad.',
