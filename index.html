@@ -3761,8 +3761,35 @@ function toggleEditDeliveryFields() {
     document.getElementById('editFormModal').classList.add('hidden');
     document.getElementById('editFormModal').classList.remove('flex');
 }
-     // SOLICITAR DISEÑO POR WHATSAPP
+ // SOLICITAR DISEÑO POR WHATSAPP
 function sendDesignIdeaWhatsApp() {
+
+    // ============================================
+    // VALIDAR DÍA PARA RECIBIR PEDIDOS
+    // ============================================
+    const hoy = new Date();
+
+    const diasSemana = [
+        'domingo',
+        'lunes',
+        'martes',
+        'miercoles',
+        'jueves',
+        'viernes',
+        'sabado'
+    ];
+
+    const diaActual = diasSemana[hoy.getDay()];
+
+    if (state.orderDays && state.orderDays[diaActual] === false) {
+
+        showToast(
+            'Hoy no estamos recibiendo pedidos. Por favor intenta nuevamente en uno de nuestros días de atención.',
+            'error'
+        );
+
+        return;
+    }
 
     const name =
         document.getElementById('clientName')?.value.trim() || '';
