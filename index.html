@@ -1938,6 +1938,131 @@ function dateFromKey(key) {
         day || 1
     );
 }
+     // ============================================
+// CAMBIAR MES DEL CALENDARIO
+// ============================================
+
+function changeAvailabilityMonth(delta) {
+
+    const next = new Date(availabilityCalendarMonth);
+
+    next.setMonth(next.getMonth() + delta);
+
+    const min = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        1
+    );
+
+    // No permitir navegar a meses anteriores al actual
+    if (next < min) {
+        return;
+    }
+
+    availabilityCalendarMonth = next;
+    selectedAvailabilityDate = '';
+
+    const detail =
+        document.getElementById('availabilityCalendarDetail');
+
+    if (detail) {
+        detail.textContent =
+            'Selecciona una fecha para consultar su disponibilidad.';
+    }
+
+    renderAvailabilityCalendar();
+}
+
+
+// ============================================
+// DIBUJAR CALENDARIO
+// ============================================
+
+function renderAvailabilityCalendar() {
+
+    const grid =
+        document.getElementById('availabilityCalendarGrid');
+
+    const monthTitle =
+        document.getElementById('availabilityCalendarMonth');
+
+    if (!grid || !monthTitle) {
+        return;
+    }
+
+    const year =
+        availabilityCalendarMonth.getFullYear();
+
+    const month =
+        availabilityCalendarMonth.getMonth();
+
+    monthTitle.textContent =
+        `${AVAILABILITY_MONTHS[month]} ${year}`;
+
+    const first =
+        new Date(year, month, 1);
+
+    // El calendario comienza en lunes
+    let start = first.getDay();
+
+    start = start === 0 ? 6 : start - 1;
+
+    const daysInMonth =
+        new Date(year, month + 1, 0).getDate();
+
+    let html = '';
+
+    // Espacios antes del día 1
+    for (let i = 0; i < start; i++) {
+
+        html += `
+            <div class="availability-day is-empty"></div>
+        `;
+    }
+
+    // Días del mes
+    for (let day = 1; day <= daysInMonth; day++) {
+
+        const key =
+            `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+        const status =
+            availabilityStatusForDate(key);
+
+        const today =
+            key === normalizeDateKey(new Date());
+
+        const selected =
+            key === selectedAvailabilityDate;
+
+        const clickable =
+            status !== 'closed' &&
+            key >= normalizeDateKey(new Date());
+
+        html += `
+            <button
+                type="button"
+                class="availability-day ${status}
+                ${today ? 'today' : ''}
+                ${selected ? 'selected' : ''}
+                ${!clickable ? 'disabled' : ''}"
+                ${clickable
+                    ? `onclick="selectAvailabilityDate('${key}')"`
+                    : ''}
+            >
+
+                <span class="day-number">
+                    ${day}
+                </span>
+
+                <span class="day-status-dot"></span>
+
+            </button>
+        `;
+    }
+
+    grid.innerHTML = html;
+}
 
         // GESTIÓN DEL FORMULARIO Y CONFIRMACIÓN POR EL CLIENTE
         let pendingOrderData = null;
