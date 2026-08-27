@@ -1771,6 +1771,7 @@ function showToast(message, type = 'info') {
                 return;
             }
             // ============================================
+// ============================================
 // VALIDAR DÍA PARA RECIBIR PEDIDOS
 // ============================================
 const hoy = new Date();
@@ -1790,13 +1791,12 @@ const diaActual = diasSemana[hoy.getDay()];
 if (state.orderDays && state.orderDays[diaActual] === false) {
 
     showToast(
-        'Hoy no estamos recibiendo pedidos. Por favor intenta nuevamente en un día disponible.',
+        'Hoy no estamos recibiendo pedidos. Por favor intenta nuevamente en uno de nuestros días de atención.',
         'error'
     );
 
     return;
 }
-
             const clientName = document.getElementById('clientName').value.trim();
             const clientPhone = document.getElementById('clientPhone').value.trim();
             const eventType = document.getElementById('eventType').value;
