@@ -2047,6 +2047,7 @@ renderBranches();
 renderBlockedDates();
 renderLimitedDates();
 renderOrderDaysAdmin();
+
 updateOrderAvailabilityStatus();
 renderAvailabilityCalendar();
 
@@ -2585,9 +2586,9 @@ function updateOrderAvailabilityStatus() {
     // REVISAR SI HOY ESTÁ ABIERTO
     // ============================================
 
-    const estaAbierto =
-        !state.orderDays ||
-        state.orderDays[diaActual] !== false;
+  const estaAbierto =
+    state.orderDays &&
+    state.orderDays[diaActual] === true;
 
     // ============================================
     // 🟢 DÍA ABIERTO
