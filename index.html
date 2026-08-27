@@ -891,6 +891,53 @@ Notas adicionales:</textarea>
                         <div id="blockedDatesList" class="flex flex-wrap gap-2"></div>
                     </div>
                 </div>
+                <!-- POCA DISPONIBILIDAD -->
+<div class="mt-5 pt-5 border-t border-stone-100">
+
+    <div class="flex items-center gap-2 mb-3">
+        <span class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm">
+            <i class="fa-solid fa-circle-exclamation"></i>
+        </span>
+
+        <div>
+            <h5 class="font-bold text-brand-700 text-sm">
+                Poca disponibilidad
+            </h5>
+
+            <p class="text-[11px] text-stone-400">
+                Marca fechas en las que todavía puedes recibir pedidos,
+                pero tienes poca disponibilidad.
+            </p>
+        </div>
+    </div>
+
+    <div class="flex gap-3">
+
+        <input
+            type="date"
+            id="limitedDateInput"
+            class="input-canva flex-grow"
+        >
+
+        <button
+            type="button"
+            onclick="markLimitedDate()"
+            class="bg-amber-500 text-white px-6 py-3 rounded-2xl text-xs font-bold uppercase tracking-widest shadow hover:bg-amber-600 transition flex items-center gap-1.5"
+        >
+            <i class="fa-solid fa-circle-exclamation"></i>
+            POCA DISPONIBILIDAD
+        </button>
+
+    </div>
+
+    <div class="pt-3">
+        <div
+            id="limitedDatesList"
+            class="flex flex-wrap gap-2">
+        </div>
+    </div>
+
+</div>
                 <!-- 8. DÍAS PARA RECIBIR PEDIDOS -->
 <div class="admin-section-card space-y-4">
     <div class="flex items-center gap-2.5 border-b border-stone-100 pb-3">
