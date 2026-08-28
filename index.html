@@ -2653,6 +2653,11 @@ function changeAvailabilityMonth(delta) {
 // ESTADO DE PEDIDOS DEL DÍA ACTUAL
 // ============================================
 
+// ============================================
+// ACTUALIZAR ESTADO DE PEDIDOS
+// SOLO POR DÍAS
+// ============================================
+
 function updateOrderAvailabilityStatus() {
 
     const box =
@@ -2667,9 +2672,16 @@ function updateOrderAvailabilityStatus() {
     const message =
         document.getElementById('orderAvailabilityMessage');
 
+    const daysBox =
+        document.getElementById('orderAvailabilityDays');
+
     if (!box || !icon || !title || !message) {
         return;
     }
+
+    // ============================================
+    // DÍAS DE LA SEMANA
+    // ============================================
 
     const diasSemana = [
         'domingo',
@@ -2681,18 +2693,55 @@ function updateOrderAvailabilityStatus() {
         'sabado'
     ];
 
+    const nombresDias = {
+        lunes: 'Lun',
+        martes: 'Mar',
+        miercoles: 'Mié',
+        jueves: 'Jue',
+        viernes: 'Vie',
+        sabado: 'Sáb',
+        domingo: 'Dom'
+    };
+
     const hoy = new Date();
 
     const diaActual =
         diasSemana[hoy.getDay()];
 
     // ============================================
+    // SI TODAVÍA NO SE HA CARGADO LA CONFIGURACIÓN
+    // ============================================
+
+    if (!state.orderDays) {
+
+        box.classList.remove(
+            'is-open',
+            'is-closed'
+        );
+
+        icon.innerHTML =
+            '<i class="fa-regular fa-calendar"></i>';
+
+        title.innerHTML =
+            '<span class="order-status-dot"></span>' +
+            '<span>Consultando disponibilidad...</span>';
+
+        message.textContent =
+            'Estamos consultando los días disponibles para recibir pedidos.';
+
+        if (daysBox) {
+            daysBox.innerHTML = '';
+        }
+
+        return;
+    }
+
+    // ============================================
     // REVISAR SI HOY ESTÁ ABIERTO
     // ============================================
 
-  const estaAbierto =
-    state.orderDays &&
-    state.orderDays[diaActual] === true;
+    const estaAbierto =
+        state.orderDays[diaActual] !== false;
 
     // ============================================
     // 🟢 DÍA ABIERTO
@@ -2704,7 +2753,7 @@ function updateOrderAvailabilityStatus() {
         box.classList.add('is-open');
 
         icon.innerHTML =
-            '<i class="fa-solid fa-circle-check"></i>';
+            '<i class="fa-solid fa-calendar-check"></i>';
 
         title.innerHTML =
             '<span class="order-status-dot"></span>' +
@@ -2713,27 +2762,65 @@ function updateOrderAvailabilityStatus() {
         message.textContent =
             'Hoy puedes enviar tu pedido. Te recomendamos apartar tu fecha con anticipación.';
 
-        return;
     }
 
     // ============================================
     // 🌙 DÍA CERRADO
     // ============================================
 
-    box.classList.remove('is-open');
-    box.classList.add('is-closed');
+    else {
 
-    icon.innerHTML =
-        '<i class="fa-solid fa-moon"></i>';
+        box.classList.remove('is-open');
+        box.classList.add('is-closed');
 
-    title.innerHTML =
-        '<span class="order-status-dot"></span>' +
-        '<span>Pedidos cerrados por ahora</span>';
+        icon.innerHTML =
+            '<i class="fa-solid fa-moon"></i>';
 
-    message.textContent =
-        'Hoy no estamos recibiendo pedidos. Consulta nuestro calendario para elegir otra fecha disponible.';
-}   
+        title.innerHTML =
+            '<span class="order-status-dot"></span>' +
+            '<span>Pedidos cerrados por ahora</span>';
 
+        message.textContent =
+            'Hoy no estamos recibiendo pedidos. Consulta nuestro calendario para elegir otra fecha disponible.';
+    }
+
+    // ============================================
+    // MOSTRAR DÍAS PARA RECIBIR PEDIDOS
+    // ============================================
+
+    if (daysBox) {
+
+        const diasActivos = diasSemana
+            .filter(dia => state.orderDays[dia] !== false);
+
+        if (diasActivos.length > 0) {
+
+            daysBox.innerHTML = `
+                <div class="order-availability-days-title">
+                    <i class="fa-regular fa-calendar"></i>
+                    Días para recibir pedidos
+                </div>
+
+                <div class="order-availability-days-list">
+                    ${diasActivos.map(dia => `
+                        <span class="order-availability-day-chip">
+                            ${nombresDias[dia]}
+                        </span>
+                    `).join('')}
+                </div>
+            `;
+
+        } else {
+
+            daysBox.innerHTML = `
+                <div class="order-availability-days-title">
+                    <i class="fa-regular fa-calendar-xmark"></i>
+                    No hay días disponibles para recibir pedidos.
+                </div>
+            `;
+        }
+    }
+}
 
 // ============================================
 // DIBUJAR CALENDARIO
