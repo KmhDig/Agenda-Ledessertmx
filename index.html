@@ -5219,16 +5219,15 @@ function sendDesignIdeaWhatsApp() {
     // ============================================
     const hoy = new Date();
 
-    const diasSemana = [
-        'domingo',
-        'lunes',
-        'martes',
-        'miercoles',
-        'jueves',
-        'viernes',
-        'sabado'
-    ];
-
+   const diasSemana = [
+    'lunes',
+    'martes',
+    'miercoles',
+    'jueves',
+    'viernes',
+    'sabado',
+    'domingo'
+];
     const diaActual = diasSemana[hoy.getDay()];
 
     if (state.orderDays && state.orderDays[diaActual] === false) {
