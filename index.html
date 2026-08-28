@@ -165,43 +165,54 @@
 .order-availability-status {
     display: flex;
     align-items: center;
-    gap: 0.9rem;
+    gap: 1rem;
     margin-bottom: 1rem;
-    padding: 1rem 1.1rem;
-    border-radius: 1.4rem;
+    padding: 1rem 1.15rem;
+    border-radius: 1.5rem;
     border: 1px solid #edf1f0;
-    background: #ffffff;
-    box-shadow: 0 10px 25px -18px rgba(45,73,76,.25);
+    background: rgba(255,255,255,.96);
+    box-shadow:
+        0 10px 25px -18px rgba(45,73,76,.28),
+        0 2px 8px rgba(45,73,76,.03);
+    transition: all .25s ease;
 }
 
+/* ICONO */
+
 .order-availability-icon {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     flex-shrink: 0;
-    border-radius: 14px;
+    border-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f5f5f4;
-    color: #78716c;
-    font-size: .9rem;
+    font-size: 1rem;
+    transition: all .25s ease;
 }
+
+/* TÍTULO */
 
 .order-availability-title {
     display: flex;
     align-items: center;
-    gap: .4rem;
+    gap: .45rem;
     color: var(--brand-dark);
-    font-size: .78rem;
+    font-size: .8rem;
     font-weight: 800;
+    letter-spacing: -.01em;
 }
 
+/* MENSAJE */
+
 .order-availability-message {
-    margin-top: .2rem;
+    margin-top: .25rem;
     color: #827a76;
-    font-size: .65rem;
+    font-size: .66rem;
     line-height: 1.5;
 }
+
+/* PUNTO DE ESTADO */
 
 .order-status-dot {
     width: 7px;
@@ -209,6 +220,91 @@
     flex-shrink: 0;
     border-radius: 50%;
     background: #a8a29e;
+}
+
+/* ============================================
+   PEDIDOS ABIERTOS
+   ============================================ */
+
+.order-availability-status.is-open {
+    border-color: rgba(16,185,129,.16);
+    background: linear-gradient(
+        135deg,
+        #ffffff 0%,
+        #f7fffb 100%
+    );
+}
+
+.order-availability-status.is-open .order-availability-icon {
+    background: #ecfdf5;
+    color: #10b981;
+}
+
+.order-availability-status.is-open .order-status-dot {
+    background: #10b981;
+    box-shadow: 0 0 0 4px rgba(16,185,129,.10);
+}
+
+/* ============================================
+   PEDIDOS CERRADOS
+   ============================================ */
+
+.order-availability-status.is-closed {
+    border-color: rgba(168,162,158,.18);
+    background: linear-gradient(
+        135deg,
+        #ffffff 0%,
+        #fafaf9 100%
+    );
+}
+
+.order-availability-status.is-closed .order-availability-icon {
+    background: #f5f5f4;
+    color: #78716c;
+}
+
+.order-availability-status.is-closed .order-status-dot {
+    background: #a8a29e;
+}
+
+/* ============================================
+   LISTA DE DÍAS
+   ============================================ */
+
+.order-hours-summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .35rem;
+    margin-top: .55rem;
+}
+
+.order-day-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    padding: .28rem .55rem;
+    border-radius: 999px;
+    background: #f4f8f8;
+    border: 1px solid #e5eeee;
+    color: var(--brand-dark);
+    font-size: .58rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.order-day-chip i {
+    font-size: .52rem;
+    color: var(--brand-main);
+}
+
+/* Texto cuando no hay días configurados */
+
+.order-days-empty {
+    margin-top: .5rem;
+    color: #a8a29e;
+    font-size: .58rem;
+    font-weight: 600;
 }
         #toast-container {
             position: fixed;
@@ -616,22 +712,33 @@ background-repeat:no-repeat;">
                 <p class="text-xs text-stone-400 pt-1">Ingresa los datos requeridos para generar tu solicitud oficial</p>
             </div>
              </div>
-            <!-- ESTADO DE PEDIDOS -->
-<div id="orderAvailabilityStatus" class="order-availability-status is-closed">
+            <!-- ============================================
+     ESTADO DE PEDIDOS
+     ============================================ -->
+
+div id="orderAvailabilityStatus" class="order-availability-status is-closed">
 
     <div class="order-availability-icon">
         <i class="fa-solid fa-moon"></i>
     </div>
 
-    <div>
+    <div class="flex-1">
+
         <div id="orderAvailabilityTitle" class="order-availability-title">
-            <span class="order-status-dot"></span> 
+            <span class="order-status-dot"></span>
             <span>Pedidos cerrados por ahora</span>
         </div>
 
         <div id="orderAvailabilityMessage" class="order-availability-message">
             En este momento no estamos recibiendo pedidos.
         </div>
+
+        <!-- DÍAS EN LOS QUE SE RECIBEN PEDIDOS -->
+        <div
+            id="orderDaysSummary"
+            class="order-hours-summary">
+        </div>
+
     </div>
 
 </div>
