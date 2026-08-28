@@ -2153,6 +2153,10 @@ renderBranches();
 renderBlockedDates();
 renderLimitedDates();
 renderOrderDaysAdmin();
+
+updateOrderAvailabilityStatus();
+renderOrderAvailabilityDays();
+
 renderAvailabilityCalendar();
 
 console.log('Configuración cargada desde Google Sheets');
@@ -2678,6 +2682,71 @@ function updateOrderAvailabilityStatus() {
     if (!box || !icon || !title || !message) {
         return;
     }
+    // ============================================
+// MOSTRAR DÍAS PARA RECIBIR PEDIDOS
+// ============================================
+
+function renderOrderAvailabilityDays() {
+
+    const container =
+        document.getElementById('orderAvailabilityDays');
+
+    if (!container) return;
+
+    const nombres = {
+        lunes: 'Lunes',
+        martes: 'Martes',
+        miercoles: 'Miércoles',
+        jueves: 'Jueves',
+        viernes: 'Viernes',
+        sabado: 'Sábado',
+        domingo: 'Domingo'
+    };
+
+    const orden = [
+        'lunes',
+        'martes',
+        'miercoles',
+        'jueves',
+        'viernes',
+        'sabado',
+        'domingo'
+    ];
+
+    const diasActivos = orden.filter(dia =>
+        state.orderDays?.[dia] === true
+    );
+
+    if (diasActivos.length === 0) {
+
+        container.innerHTML = `
+            <div class="order-days-title">
+                Días para recibir pedidos
+            </div>
+
+            <div class="order-days-empty">
+                Actualmente no hay días disponibles para recibir pedidos.
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="order-days-title">
+            Días para recibir pedidos
+        </div>
+
+        <div class="order-days-list">
+            ${diasActivos.map(dia => `
+                <span class="order-day-chip">
+                    <i class="fa-regular fa-calendar"></i>
+                    ${nombres[dia]}
+                </span>
+            `).join('')}
+        </div>
+    `;
+}
 
     // ============================================
     // DÍAS DE LA SEMANA
@@ -3825,7 +3894,8 @@ saveAppState();
 
 guardarConfiguracionEnGoogleSheets();
 
-updateOrderAvailability();
+updateOrderAvailabilityStatus();
+renderOrderAvailabilityDays();
 
 showToast(
     'Días para recibir pedidos guardados correctamente',
