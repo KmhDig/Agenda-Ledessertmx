@@ -717,30 +717,27 @@ background-repeat:no-repeat;">
      ============================================ -->
 
 <!-- ESTADO DE PEDIDOS -->
-<div id="orderAvailabilityStatus" class="order-availability-status is-closed">
+<div id="orderAvailabilityStatus" class="order-availability-status">
 
     <div class="order-availability-icon">
-        <i class="fa-solid fa-moon"></i>
+        <i class="fa-solid fa-calendar-check"></i>
     </div>
 
-    <div class="order-availability-content">
-
+    <div>
         <div id="orderAvailabilityTitle" class="order-availability-title">
             <span class="order-status-dot"></span>
-            <span>Pedidos cerrados por ahora</span>
+            <span>Verificando disponibilidad...</span>
         </div>
 
         <div id="orderAvailabilityMessage" class="order-availability-message">
-            En este momento no estamos recibiendo pedidos.
+            Consultando los días disponibles para recibir pedidos.
         </div>
-
-        <!-- DÍAS PARA RECIBIR PEDIDOS -->
-        <div id="orderAvailabilityDays" class="order-availability-days">
-        </div>
-
     </div>
 
 </div>
+
+<!-- DÍAS PARA RECIBIR PEDIDOS -->
+<div id="orderAvailabilityDays" class="order-availability-days"></div>
                 <!-- ============================================
      CALENDARIO DE DISPONIBILIDAD
      ============================================ -->
