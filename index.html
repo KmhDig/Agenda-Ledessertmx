@@ -2699,13 +2699,13 @@ function renderOrderAvailabilityDays() {
 
     const diasSemana = [
         'lunes',
-    'martes',
-    'miercoles',
-    'jueves',
-    'viernes',
-    'sabado',
-    'domingo'
-];
+        'martes',
+        'miercoles',
+        'jueves',
+        'viernes',
+        'sabado',
+        'domingo'
+    ];
 
     const nombres = {
         lunes: 'Lunes',
@@ -2721,9 +2721,11 @@ function renderOrderAvailabilityDays() {
         return state.orderDays?.[dia] !== false;
     });
 
+    // COMPROBAR EL ORDEN REAL
+    console.log('ORDEN DE DÍAS:', diasActivos);
+
     if (diasActivos.length === 0) {
 
-        console.log('ORDEN DE DÍAS:', diasActivos); 
         container.innerHTML = `
             <div class="order-availability-days-empty">
                 No hay días disponibles para recibir pedidos.
