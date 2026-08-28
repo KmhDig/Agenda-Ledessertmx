@@ -737,7 +737,8 @@ background-repeat:no-repeat;">
 </div>
 
 <!-- DÍAS PARA RECIBIR PEDIDOS -->
-<div id="orderAvailabilityDays" class="order-availability-days"></div>
+<div id="orderAvailabilityDays" class="order-availability-days">
+</div>
                 <!-- ============================================
      CALENDARIO DE DISPONIBILIDAD
      ============================================ -->
@@ -2687,6 +2688,8 @@ function updateOrderAvailabilityStatus() {
 // ============================================
 
 function renderOrderAvailabilityDays() {
+
+  console.log('MOSTRANDO DÍAS DE PEDIDOS');
 
     const container =
         document.getElementById('orderAvailabilityDays');
