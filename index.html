@@ -2035,7 +2035,8 @@ function closeImage() {
         }
 
         // INICIALIZACIÓN
-    window.onload = function() {
+   window.onload = function() {
+
     applyClientConfig();
 
     initFormCatalogs();
@@ -2045,13 +2046,11 @@ function closeImage() {
     renderBlockedDates();
     renderLimitedDates();
     renderOrderDaysAdmin();
-
-    updateOrderAvailability();
-    updateOrderAvailabilityStatus();
     renderAvailabilityCalendar();
 
     cargarConfiguracionDesdeGoogleSheets();
     cargarPedidosDesdeGoogleSheets();
+
 };
         // ALMACENAMIENTO LOCAL
         function loadAppState() {
@@ -2139,13 +2138,16 @@ if (config.branches) {
         return String(fecha).substring(0, 10);
     }).filter(Boolean);
 }
-        // Cargar días permitidos para recibir pedidos
+      // Cargar días permitidos para recibir pedidos
 if (config.orderDays) {
     state.orderDays = {
         ...state.orderDays,
         ...config.orderDays
     };
 }
+
+// ACTUALIZAR ESTADO DE PEDIDOS
+updateOrderAvailability();
 
 saveAppState();
 
@@ -2155,15 +2157,12 @@ renderBranches();
 renderBlockedDates();
 renderLimitedDates();
 renderOrderDaysAdmin();
-
-updateOrderAvailabilityStatus();
 renderAvailabilityCalendar();
 
 console.log('Configuración cargada desde Google Sheets');
 
-    } catch (error) {
-        console.error('Error cargando configuración desde Google Sheets:', error);
-    }
+} catch (error) {
+    console.error('Error cargando configuración desde Google Sheets:', error);
 }
 async function cargarPedidosDesdeGoogleSheets() {
     try {
