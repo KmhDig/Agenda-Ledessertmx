@@ -2939,43 +2939,36 @@ function showToast(message, type = 'info') {
         return 'full';
     }
 
- // 🟡 POCA DISPONIBILIDAD
-if (
-    state.limitedDates &&
-    state.limitedDates.includes(key)
-) {
-    return 'limited';
-}
+    // 🟡 POCA DISPONIBILIDAD
+    if (
+        state.limitedDates &&
+        state.limitedDates.includes(key)
+    ) {
+        return 'limited';
+    }
 
-// ⚪ REVISAR DÍA DE ATENCIÓN
-const date = dateFromKey(key);
+    // ⚪ DÍA CERRADO EN CALENDARIO
+    const date = dateFromKey(key);
 
-const dayKey =
-    ORDER_DAY_KEYS[date.getDay()];
-
-// ⚪ DÍA CERRADO EN CALENDARIO
-if (
-    state.calendarClosedDays &&
-    state.calendarClosedDays[dayKey] === true
-) {
-    return 'closed';
-}
-
-// Si tienes orderHours configurado
-if (state.orderHours) {
-
-    const schedule =
-        state.orderHours[dayKey];
+    const dayKey =
+        ORDER_DAY_KEYS[date.getDay()];
 
     if (
-        !schedule ||
-        schedule.activo === false
+        state.calendarClosedDays &&
+        state.calendarClosedDays[dayKey] === true
     ) {
         return 'closed';
     }
-}
 
-    // ⚪ FECHAS ANTERIORES A HOY
+    // ⚪ DÍA NO DISPONIBLE PARA RECIBIR PEDIDOS
+    if (
+        state.orderDays &&
+        state.orderDays[dayKey] === false
+    ) {
+        return 'closed';
+    }
+
+    // ⚪ FECHA PASADA
     const todayKey =
         normalizeDateKey(new Date());
 
@@ -2986,6 +2979,7 @@ if (state.orderHours) {
     // 🟢 DISPONIBLE
     return 'available';
 }
+            
  // ============================================================
 // CALENDARIO DE DISPONIBILIDAD
 // ============================================================
