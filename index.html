@@ -2671,6 +2671,26 @@ state.orderDays = {
 
 
 // ============================================
+// CARGAR DÍAS CERRADOS EN CALENDARIO
+// ============================================
+
+const diasCerradosPorDefecto = {
+    lunes: false,
+    martes: false,
+    miercoles: false,
+    jueves: false,
+    viernes: false,
+    sabado: false,
+    domingo: false
+};
+
+state.calendarClosedDays = {
+    ...diasCerradosPorDefecto,
+    ...(config.calendarClosedDays || {})
+};
+
+
+// ============================================
 // RENDERIZAR CONFIGURACIÓN
 // ============================================
 
@@ -2685,6 +2705,7 @@ renderBlockedDates();
 renderLimitedDates();
 
 renderOrderDaysAdmin();
+renderCalendarClosedDaysAdmin();
 
 
 // ============================================
