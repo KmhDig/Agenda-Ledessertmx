@@ -2969,11 +2969,21 @@ function availabilityStatusForDate(key) {
     }
 
     // ⚪ DÍA CERRADO
-    const date = dateFromKey(key);
+const date = dateFromKey(key);
 
-    const dayKey = ORDER_DAY_KEYS[date.getDay()];
+const CALENDAR_DAY_KEYS = [
+    'domingo',
+    'lunes',
+    'martes',
+    'miercoles',
+    'jueves',
+    'viernes',
+    'sabado'
+];
 
-   if (
+const dayKey = CALENDAR_DAY_KEYS[date.getDay()];
+
+if (
     state.calendarClosedDays &&
     state.calendarClosedDays[dayKey] === true
 ) {
