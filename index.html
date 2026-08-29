@@ -5296,8 +5296,12 @@ function addToGoogleCalendar(orderId) {
             });
         }
 
-        // FINANZAS MODAL
-        function openFinanceModal(id) {
+    // ============================================
+// FINANZAS MODAL
+// ============================================
+
+function openFinanceModal(id) {
+
     currentEditingFinanceOrderId = id;
 
     const order = state.orders.find(o => o.id == id);
@@ -5310,9 +5314,19 @@ function addToGoogleCalendar(orderId) {
     document.getElementById('financeClientName').textContent =
         `Cliente: ${order.clientName} (${order.eventDate})`;
 
+    // TOTAL
     document.getElementById('financeTotalInput').value =
         order.totalPrice || 0;
 
+    // PORCENTAJE DE ANTICIPO
+    document.getElementById('financeAnticipoPorcentajeInput').value =
+        order.anticipoPorcentaje || 50;
+
+    // ANTICIPO SOLICITADO
+    document.getElementById('financeAnticipoSolicitadoInput').value =
+        order.anticipoSolicitado || 0;
+
+    // ANTICIPO PAGADO
     document.getElementById('financeAnticipoInput').value =
         order.anticipo || 0;
 
@@ -5322,20 +5336,63 @@ function addToGoogleCalendar(orderId) {
     document.getElementById('financeModal').classList.add('flex');
 }
 
-        function closeFinanceModal() {
-            document.getElementById('financeModal').classList.add('hidden');
-            document.getElementById('financeModal').classList.remove('flex');
-            currentEditingFinanceOrderId = null;
-        }
 
-        function calculateFinanceRestante() {
-            const tot = parseFloat(document.getElementById('financeTotalInput').value) || 0;
-            const ant = parseFloat(document.getElementById('financeAnticipoInput').value) || 0;
-            const res = tot - ant;
-            document.getElementById('financeRestanteDisplay').textContent = `$${res.toFixed(2)}`;
-        }
+function closeFinanceModal() {
 
-        function saveFinanceSettings() {
+    document.getElementById('financeModal').classList.add('hidden');
+    document.getElementById('financeModal').classList.remove('flex');
+
+    currentEditingFinanceOrderId = null;
+}
+
+
+// ============================================
+// CALCULAR ANTICIPO Y RESTANTE
+// ============================================
+
+function calculateFinanceRestante() {
+
+    const total =
+        parseFloat(
+            document.getElementById('financeTotalInput').value
+        ) || 0;
+
+    const porcentaje =
+        parseFloat(
+            document.getElementById(
+                'financeAnticipoPorcentajeInput'
+            ).value
+        ) || 0;
+
+    const anticipoPagado =
+        parseFloat(
+            document.getElementById('financeAnticipoInput').value
+        ) || 0;
+
+    // Calcular cuánto se debe solicitar
+    const anticipoSolicitado =
+        total * (porcentaje / 100);
+
+    document.getElementById(
+        'financeAnticipoSolicitadoInput'
+    ).value = anticipoSolicitado.toFixed(2);
+
+    // Calcular restante
+    const restante =
+        Math.max(total - anticipoPagado, 0);
+
+    document.getElementById(
+        'financeRestanteDisplay'
+    ).textContent = `$${restante.toFixed(2)}`;
+}
+
+
+// ============================================
+// GUARDAR FINANZAS
+// ============================================
+
+function saveFinanceSettings() {
+
     if (!currentEditingFinanceOrderId) return;
 
     const order = state.orders.find(
@@ -5348,22 +5405,56 @@ function addToGoogleCalendar(orderId) {
     }
 
     order.totalPrice =
-        parseFloat(document.getElementById('financeTotalInput').value) || 0;
+        parseFloat(
+            document.getElementById('financeTotalInput').value
+        ) || 0;
+
+    order.anticipoPorcentaje =
+        parseFloat(
+            document.getElementById(
+                'financeAnticipoPorcentajeInput'
+            ).value
+        ) || 0;
+
+    order.anticipoSolicitado =
+        parseFloat(
+            document.getElementById(
+                'financeAnticipoSolicitadoInput'
+            ).value
+        ) || 0;
 
     order.anticipo =
-        parseFloat(document.getElementById('financeAnticipoInput').value) || 0;
+        parseFloat(
+            document.getElementById('financeAnticipoInput').value
+        ) || 0;
+
+    order.restante =
+        Math.max(
+            order.totalPrice - order.anticipo,
+            0
+        );
 
     saveAppState();
 
     actualizarFinanzasEnGoogleSheets(order);
 
     renderOrders();
+
     closeFinanceModal();
 
-    showToast('Finanzas del pedido actualizadas', 'success');
+    showToast(
+        'Finanzas del pedido actualizadas',
+        'success'
+    );
 }
 
-        function markOrderAsPaid() {
+
+// ============================================
+// MARCAR PEDIDO COMO PAGADO
+// ============================================
+
+function markOrderAsPaid() {
+
     if (!currentEditingFinanceOrderId) return;
 
     const order = state.orders.find(
@@ -5376,16 +5467,24 @@ function addToGoogleCalendar(orderId) {
     }
 
     // El anticipo pasa a ser igual al total
-    order.anticipo = order.totalPrice || 0;
+    order.anticipo =
+        order.totalPrice || 0;
+
+    // El restante queda en cero
+    order.restante = 0;
 
     saveAppState();
 
     actualizarFinanzasEnGoogleSheets(order);
 
     renderOrders();
+
     closeFinanceModal();
 
-    showToast('Pedido marcado como pagado', 'success');
+    showToast(
+        'Pedido marcado como pagado',
+        'success'
+    );
 }
     // ============================================================
 // MODAL: DATOS PARA REALIZAR EL PAGO
