@@ -163,19 +163,23 @@
    ============================================ */
 
 .order-availability-status {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
     margin-bottom: 1rem;
-    padding: 1rem 1.15rem;
+    padding: 1rem 1.15rem 1.1rem;
     border-radius: 1.5rem;
     border: 1px solid #edf1f0;
     background: rgba(255,255,255,.96);
+
     box-shadow:
         0 10px 25px -18px rgba(45,73,76,.28),
         0 2px 8px rgba(45,73,76,.03);
+
     transition: all .25s ease;
 }
+ .order-availability-main {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}       
 
 /* ICONO */
 
@@ -309,22 +313,11 @@
         /* ============================================
    DÍAS PARA RECIBIR PEDIDOS
    ============================================ */
-
 .order-availability-days {
-    margin-top: -1rem;
-    margin-bottom: 1rem;
-    padding: 0 1.15rem 1rem 1.15rem;
+    margin-top: .85rem;
+    padding-top: .8rem;
 
-    background: rgba(255,255,255,.96);
-
-    border-left: 1px solid #edf1f0;
-    border-right: 1px solid #edf1f0;
-    border-bottom: 1px solid #edf1f0;
-
-    border-radius: 0 0 1.5rem 1.5rem;
-
-    box-shadow:
-        0 10px 25px -18px rgba(45,73,76,.28);
+    border-top: 1px solid #f0f2f1;
 }
 
 .order-availability-days-title {
@@ -938,25 +931,31 @@ background-repeat:no-repeat;">
 <!-- ESTADO DE PEDIDOS -->
 <div id="orderAvailabilityStatus" class="order-availability-status">
 
-    <div class="order-availability-icon">
-        <i class="fa-solid fa-calendar-check"></i>
-    </div>
+    <div class="order-availability-main">
 
-    <div>
-        <div id="orderAvailabilityTitle" class="order-availability-title">
-            <span class="order-status-dot"></span>
-            <span>Verificando disponibilidad...</span>
+        <div class="order-availability-icon">
+            <i class="fa-solid fa-calendar-check"></i>
         </div>
 
-        <div id="orderAvailabilityMessage" class="order-availability-message">
-            Consultando los días disponibles para recibir pedidos.
+        <div class="order-availability-content">
+
+            <div id="orderAvailabilityTitle" class="order-availability-title">
+                <span class="order-status-dot"></span>
+                <span>Verificando disponibilidad...</span>
+            </div>
+
+            <div id="orderAvailabilityMessage" class="order-availability-message">
+                Consultando los días disponibles para recibir pedidos.
+            </div>
+
         </div>
+
     </div>
 
-</div>
+    <!-- DÍAS PARA RECIBIR PEDIDOS -->
+    <div id="orderAvailabilityDays" class="order-availability-days">
+    </div>
 
-<!-- DÍAS PARA RECIBIR PEDIDOS -->
-<div id="orderAvailabilityDays" class="order-availability-days">
 </div>
                 <!-- ============================================
      CALENDARIO DE DISPONIBILIDAD
