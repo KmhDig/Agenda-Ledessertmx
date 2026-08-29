@@ -5157,6 +5157,350 @@ function addToGoogleCalendar(orderId) {
 
     showToast('Pedido marcado como pagado', 'success');
 }
+     // ============================================================
+// MODAL: DATOS PARA REALIZAR EL PAGO
+// ============================================================
+
+let currentPaymentInfoOrderId = null;
+
+
+// ============================================================
+// ABRIR MODAL
+// ============================================================
+function openPaymentInfoModal(id) {
+
+    const order = state.orders.find(
+        o => String(o.id) === String(id)
+    );
+
+    if (!order) {
+        showToast('No se encontró el pedido', 'error');
+        return;
+    }
+
+    currentPaymentInfoOrderId = id;
+
+    const total =
+        parseFloat(order.totalPrice) || 0;
+
+    document.getElementById('paymentInfoClientName').textContent =
+        `Cliente: ${order.clientName || 'Sin nombre'} · ${order.eventDate || 'Sin fecha'}`;
+
+    document.getElementById('paymentInfoTotal').textContent =
+        `$${total.toFixed(2)} MXN`;
+
+    // ============================================
+    // PORCENTAJE DEL PEDIDO
+    // ============================================
+    const porcentajeGuardado =
+        Number(order.anticipoPorcentaje);
+
+    document.getElementById('paymentInfoPercent').value =
+        Number.isFinite(porcentajeGuardado) &&
+        porcentajeGuardado > 0
+            ? porcentajeGuardado
+            : 50;
+
+    // ============================================
+    // INFORMACIÓN DE PAGO
+    // ============================================
+    document.getElementById('paymentInfoBank').value =
+        state.paymentBank || '';
+
+    document.getElementById('paymentInfoHolder').value =
+        state.paymentHolder || '';
+
+    document.getElementById('paymentInfoAccount').value =
+        state.paymentAccount || '';
+
+    document.getElementById('paymentInfoAdditional').value =
+        state.paymentAdditional || '';
+
+    calculatePaymentInfoAmount();
+
+    const modal =
+        document.getElementById('paymentInfoModal');
+
+    if (!modal) {
+        showToast('No se encontró el modal de pago', 'error');
+        return;
+    }
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+
+// ============================================================
+// CERRAR MODAL
+// ============================================================
+function closePaymentInfoModal() {
+
+    const modal =
+        document.getElementById('paymentInfoModal');
+
+    if (!modal) return;
+
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+
+    currentPaymentInfoOrderId = null;
+}
+
+
+// ============================================================
+// CALCULAR ANTICIPO
+// ============================================================
+function calculatePaymentInfoAmount() {
+
+    if (!currentPaymentInfoOrderId) return;
+
+    const order = state.orders.find(
+        o => String(o.id) === String(currentPaymentInfoOrderId)
+    );
+
+    if (!order) return;
+
+    const total =
+        parseFloat(order.totalPrice) || 0;
+
+    let porcentaje =
+        parseFloat(
+            document.getElementById('paymentInfoPercent').value
+        );
+
+    if (!Number.isFinite(porcentaje)) {
+        porcentaje = 0;
+    }
+
+    porcentaje = Math.max(
+        0,
+        Math.min(100, porcentaje)
+    );
+const anticipo =
+    total * (porcentaje / 100);
+
+order.anticipoPorcentaje = porcentaje;
+order.anticipoSolicitado = anticipo;
+
+document.getElementById('paymentInfoAmount').textContent =
+    `$${anticipo.toFixed(2)} MXN`;
+
+    updatePaymentInfoPreview();
+}
+
+
+// ============================================================
+// VISTA PREVIA
+// ============================================================
+function updatePaymentInfoPreview() {
+
+    if (!currentPaymentInfoOrderId) return;
+
+    const order = state.orders.find(
+        o => String(o.id) === String(currentPaymentInfoOrderId)
+    );
+
+    if (!order) return;
+
+    const nombre =
+        order.clientName || 'cliente';
+
+    const total =
+        parseFloat(order.totalPrice) || 0;
+
+    let porcentaje =
+        parseFloat(
+            document.getElementById('paymentInfoPercent').value
+        ) || 0;
+
+    porcentaje =
+        Math.max(
+            0,
+            Math.min(100, porcentaje)
+        );
+
+    const anticipo =
+        total * (porcentaje / 100);
+
+    const banco =
+        document.getElementById('paymentInfoBank').value.trim();
+
+    const titular =
+        document.getElementById('paymentInfoHolder').value.trim();
+
+    const cuenta =
+        document.getElementById('paymentInfoAccount').value.trim();
+
+    const adicional =
+        document.getElementById('paymentInfoAdditional').value.trim();
+
+    const mensaje =
+`Hola ${nombre} 
+
+Te comparto los datos para realizar tu pago:
+
+🏦 Banco: ${banco}
+👤 Titular: ${titular}
+🔢 Cuenta / CLABE: ${cuenta}
+
+💳 Anticipo solicitado: $${anticipo.toFixed(2)} MXN
+
+${adicional}
+
+¡Muchas gracias!`;
+
+    document.getElementById(
+        'paymentInfoPreview'
+    ).value = mensaje;
+}
+
+
+// ============================================================
+// ACTUALIZAR VISTA PREVIA MIENTRAS ESCRIBE
+// ============================================================
+document.addEventListener('input', function(event) {
+
+    if (
+        event.target.id === 'paymentInfoBank' ||
+        event.target.id === 'paymentInfoHolder' ||
+        event.target.id === 'paymentInfoAccount' ||
+        event.target.id === 'paymentInfoAdditional' ||
+        event.target.id === 'paymentInfoPercent'
+    ) {
+        updatePaymentInfoPreview();
+    }
+
+});
+// ============================================================
+// ENVIAR A WHATSAPP
+// ============================================================
+function sendPaymentInfoWhatsApp() {
+
+    if (!currentPaymentInfoOrderId) {
+        showToast(
+            'No hay un pedido seleccionado',
+            'error'
+        );
+        return;
+    }
+
+    const order = state.orders.find(
+        o => String(o.id) === String(currentPaymentInfoOrderId)
+    );
+
+    if (!order) {
+        showToast(
+            'No se encontró el pedido',
+            'error'
+        );
+        return;
+    }
+
+    let phone =
+        String(order.clientPhone || '')
+            .replace(/\D/g, '');
+
+    if (!phone) {
+        showToast(
+            'Este pedido no tiene un WhatsApp válido',
+            'error'
+        );
+        return;
+    }
+
+    if (phone.length === 10) {
+        phone = '52' + phone;
+    }
+
+    const mensaje =
+        document.getElementById(
+            'paymentInfoPreview'
+        ).value.trim();
+
+    if (!mensaje) {
+        showToast(
+            'El mensaje está vacío',
+            'error'
+        );
+        return;
+    }
+
+    const url =
+        `https://wa.me/${phone}?text=${encodeURIComponent(mensaje)}`;
+
+    window.open(url, '_blank');
+
+    closePaymentInfoModal();
+
+    showToast(
+        'Abriendo WhatsApp con los datos de pago',
+        'success'
+    );
+}
+     
+// ============================================
+// ENVIAR INFORMACIÓN FINANCIERA POR WHATSAPP
+// ============================================
+function sendFinancialInfo(id) {
+
+    const order = state.orders.find(o => o.id == id);
+
+    if (!order) {
+        showToast('No se encontró el pedido', 'error');
+        return;
+    }
+
+    // WhatsApp del pedido
+    let phone = String(order.clientPhone || '').replace(/\D/g, '');
+
+    if (!phone) {
+        showToast('Este pedido no tiene un WhatsApp válido', 'error');
+        return;
+    }
+
+    // Agregar código de México si el número tiene 10 dígitos
+    if (phone.length === 10) {
+        phone = '52' + phone;
+    }
+
+    // Datos financieros actuales
+    const total = parseFloat(order.totalPrice) || 0;
+    const anticipo = parseFloat(order.anticipo) || 0;
+    const restante = Math.max(0, total - anticipo);
+
+    // Estado financiero
+    const pagado = restante <= 0 && total > 0;
+
+    const estado = pagado
+        ? '✅ Pedido pagado'
+        : '⏳ Pendiente de pago';
+
+    // Nombre del cliente
+    const nombre = order.clientName || 'cliente';
+
+    // Mensaje
+    const mensaje =
+`Hola ${nombre} 
+
+Te compartimos la información actualizada de tu pedido:
+
+💰 Total: $${total.toFixed(2)} MXN
+💳 Anticipo: $${anticipo.toFixed(2)} MXN
+💵 Restante: $${restante.toFixed(2)} MXN
+
+${estado}
+
+Cualquier duda, quedamos atentos. 
+
+¡Muchas gracias! `;
+
+    // Abrir WhatsApp directamente al cliente
+    const url =
+        `https://wa.me/${phone}?text=${encodeURIComponent(mensaje)}`;
+
+    window.open(url, '_blank');
+}  
 
 
         // EDITAR DATOS DE FORMULARIO DE PEDIDO
