@@ -2755,25 +2755,25 @@ function renderOrderAvailabilityDays() {
     // DÍAS DE LA SEMANA
     // ============================================
 
-    const diasSemana = [
-        'domingo',
-        'lunes',
-        'martes',
-        'miercoles',
-        'jueves',
-        'viernes',
-        'sabado'
-    ];
+   const diasSemana = [
+    'lunes',
+    'martes',
+    'miercoles',
+    'jueves',
+    'viernes',
+    'sabado',
+    'domingo'
+];
 
-    const nombresDias = {
-        lunes: 'Lun',
-        martes: 'Mar',
-        miercoles: 'Mié',
-        jueves: 'Jue',
-        viernes: 'Vie',
-        sabado: 'Sáb',
-        domingo: 'Dom'
-    };
+const nombresDias = {
+    lunes: 'Lun',
+    martes: 'Mar',
+    miercoles: 'Mié',
+    jueves: 'Jue',
+    viernes: 'Vie',
+    sabado: 'Sáb',
+    domingo: 'Dom'
+};
 
     const hoy = new Date();
 
@@ -2859,38 +2859,36 @@ function renderOrderAvailabilityDays() {
     // ============================================
     // MOSTRAR DÍAS PARA RECIBIR PEDIDOS
     // ============================================
+if (daysBox) {
 
-    if (daysBox) {
+    const diasActivos = diasSemana
+        .filter(dia => state.orderDays[dia] !== false);
 
-        const diasActivos = diasSemana
-            .filter(dia => state.orderDays[dia] !== false);
+    if (diasActivos.length > 0) {
 
-        if (diasActivos.length > 0) {
+        daysBox.innerHTML = `
+            <div class="order-availability-days-title">
+                <i class="fa-regular fa-calendar"></i>
+                Días para recibir pedidos
+            </div>
 
-            daysBox.innerHTML = `
-                <div class="order-availability-days-title">
-                    <i class="fa-regular fa-calendar"></i>
-                    Días para recibir pedidos
-                </div>
+            <div class="order-availability-days-list">
+                ${diasActivos.map(dia => `
+                    <span class="order-availability-day-chip">
+                        ${nombresDias[dia]}
+                    </span>
+                `).join('')}
+            </div>
+        `;
 
-                <div class="order-availability-days-list">
-                    ${diasActivos.map(dia => `
-                        <span class="order-availability-day-chip">
-                            ${nombresDias[dia]}
-                        </span>
-                    `).join('')}
-                </div>
-            `;
+    } else {
 
-        } else {
-
-            daysBox.innerHTML = `
-                <div class="order-availability-days-title">
-                    <i class="fa-regular fa-calendar-xmark"></i>
-                    No hay días disponibles para recibir pedidos.
-                </div>
-            `;
-        }
+        daysBox.innerHTML = `
+            <div class="order-availability-days-title">
+                <i class="fa-regular fa-calendar-xmark"></i>
+                No hay días disponibles para recibir pedidos.
+            </div>
+        `;
     }
 }
 
