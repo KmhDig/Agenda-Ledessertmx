@@ -318,43 +318,65 @@
 }
 /* ============================================
    DÍAS PARA RECIBIR PEDIDOS
+   DENTRO DEL MISMO RECUADRO
    ============================================ */
 
-.order-availability-days {
+#orderAvailabilityStatus #orderAvailabilityDays {
     display: block;
     width: 100%;
-    margin-top: 1rem;
-    padding-top: .85rem;
+    box-sizing: border-box;
+
+    margin-top: .9rem;
+    padding-top: .8rem;
 
     border-top: 1px solid #eef2f1;
 
-    box-sizing: border-box;
+    background: transparent;
+    box-shadow: none;
 }
-.order-availability-days-title {
+
+
+/* TÍTULO */
+
+#orderAvailabilityStatus .order-availability-days-title {
     display: flex;
     align-items: center;
     gap: .4rem;
 
-    padding-top: .25rem;
-    margin-bottom: .6rem;
+    margin: 0 0 .55rem;
+    padding: 0;
 
     color: var(--brand-dark);
+
     font-size: .63rem;
     font-weight: 800;
 }
 
-.order-availability-days-title i {
+
+/* ICONO */
+
+#orderAvailabilityStatus .order-availability-days-title i {
     color: var(--brand-main);
     font-size: .68rem;
 }
 
-.order-availability-days-list {
+
+/* LISTA */
+
+#orderAvailabilityStatus .order-availability-days-list {
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
-    gap: .4rem;
+
+    gap: .35rem;
+
+    width: 100%;
 }
 
-.order-availability-day-chip {
+
+/* DÍAS */
+
+#orderAvailabilityStatus .order-availability-day-chip {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -363,6 +385,8 @@
     height: 28px;
 
     padding: 0 .55rem;
+
+    box-sizing: border-box;
 
     border-radius: 999px;
 
@@ -374,64 +398,43 @@
     font-size: .55rem;
     font-weight: 800;
 
+    line-height: 1;
+
     transition: all .2s ease;
 }
 
-.order-availability-day-chip.today {
+
+/* EFECTO */
+
+#orderAvailabilityStatus .order-availability-day-chip:hover {
+    transform: translateY(-1px);
+    border-color: rgba(84,151,166,.25);
+}
+
+
+/* HOY */
+
+#orderAvailabilityStatus .order-availability-day-chip.today {
     background: #ecfdf5;
+
     border-color: rgba(16,185,129,.28);
+
     color: #059669;
 
     box-shadow:
         0 0 0 3px rgba(16,185,129,.07);
 }
 
-.order-availability-days-empty {
-    padding: .25rem 0;
+
+/* SIN DÍAS */
+
+#orderAvailabilityStatus .order-availability-days-empty {
+    padding: .2rem 0;
 
     color: #a8a29e;
+
     font-size: .58rem;
     font-weight: 600;
-}
-
-.order-availability-days-title i {
-    color: var(--brand-main);
-    font-size: .68rem;
-}
-
-.order-availability-days-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .35rem;
-}
-
-.order-availability-day-chip {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 38px;
-    padding: .34rem .58rem;
-    border-radius: 999px;
-    background: #f0f7f7;
-    border: 1px solid #dbecec;
-    color: var(--brand-dark);
-    font-size: .57rem;
-    font-weight: 800;
-    line-height: 1;
-    transition: all .2s ease;
-}
-
-.order-availability-day-chip:hover {
-    transform: translateY(-1px);
-    border-color: rgba(84,151,166,.25);
-}
-
-/* HOY */
-.order-availability-day-chip.today {
-    background: #e7f5f3;
-    border-color: rgba(84,151,166,.35);
-    color: var(--brand-dark);
-    box-shadow: 0 3px 10px rgba(84,151,166,.10);
 }
         #toast-container {
             position: fixed;
@@ -941,6 +944,7 @@ background-repeat:no-repeat;">
 <!-- ESTADO DE PEDIDOS -->
 <div id="orderAvailabilityStatus" class="order-availability-status">
 
+    <!-- PARTE SUPERIOR -->
     <div class="order-availability-main">
 
         <div class="order-availability-icon">
@@ -2382,26 +2386,61 @@ state.orderDays = {
     ...(config.orderDays || {})
 };
 
-saveAppState();
+
+// ============================================
+// RENDERIZAR CONFIGURACIÓN
+// ============================================
 
 initFormCatalogs();
+
 renderSocialLinks();
+
 renderBranches();
+
 renderBlockedDates();
+
 renderLimitedDates();
+
 renderOrderDaysAdmin();
 
-updateOrderAvailabilityStatus();
+
+// ============================================
+// ACTUALIZAR ESTADO Y DÍAS
+// ============================================
+
+updateOrderAvailability();
+
 renderOrderAvailabilityDays();
+
+
+// ============================================
+// CALENDARIO
+// ============================================
 
 renderAvailabilityCalendar();
 
-console.log('Configuración cargada desde Google Sheets');
+
+// ============================================
+// GUARDAR ESTADO LOCAL
+// ============================================
+
+saveAppState();
+
+
+console.log(
+    'Configuración cargada desde Google Sheets'
+);
 
 } catch (error) {
-    console.error('Error cargando configuración desde Google Sheets:', error);
+
+    console.error(
+        'Error cargando configuración desde Google Sheets:',
+        error
+    );
+
 }
-}      
+}    
+     
 async function cargarPedidosDesdeGoogleSheets() {
     try {
         const response = await fetch(
@@ -4089,7 +4128,7 @@ function renderOrderAvailabilityDays() {
     if (diasActivos.length === 0) {
 
         container.innerHTML = `
-            <div class="order-availability-days-title">
+            <div class="order-availability-days-empty">
                 <i class="fa-regular fa-calendar-xmark"></i>
                 No hay días disponibles para recibir pedidos.
             </div>
@@ -4111,17 +4150,25 @@ function renderOrderAvailabilityDays() {
     ][hoy.getDay()];
 
     container.innerHTML = `
+
         <div class="order-availability-days-title">
+
             <i class="fa-regular fa-calendar"></i>
+
             <span>Días para recibir pedidos</span>
+
         </div>
 
         <div class="order-availability-days-list">
 
             ${diasActivos.map(dia => `
+
                 <span class="order-availability-day-chip ${dia === diaActual ? 'today' : ''}">
+
                     ${nombresDias[dia]}
+
                 </span>
+
             `).join('')}
 
         </div>
