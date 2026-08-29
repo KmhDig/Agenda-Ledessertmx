@@ -311,17 +311,84 @@
    ============================================ */
 
 .order-availability-days {
-    margin-top: .75rem;
+    margin-top: -1rem;
+    margin-bottom: 1rem;
+    padding: 0 1.15rem 1rem 1.15rem;
+
+    background: rgba(255,255,255,.96);
+
+    border-left: 1px solid #edf1f0;
+    border-right: 1px solid #edf1f0;
+    border-bottom: 1px solid #edf1f0;
+
+    border-radius: 0 0 1.5rem 1.5rem;
+
+    box-shadow:
+        0 10px 25px -18px rgba(45,73,76,.28);
 }
 
 .order-availability-days-title {
     display: flex;
     align-items: center;
     gap: .4rem;
-    margin-bottom: .45rem;
+
+    padding-top: .25rem;
+    margin-bottom: .6rem;
+
     color: var(--brand-dark);
-    font-size: .62rem;
+    font-size: .63rem;
     font-weight: 800;
+}
+
+.order-availability-days-title i {
+    color: var(--brand-main);
+    font-size: .68rem;
+}
+
+.order-availability-days-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+}
+
+.order-availability-day-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 36px;
+    height: 28px;
+
+    padding: 0 .55rem;
+
+    border-radius: 999px;
+
+    background: #f5f8f8;
+    border: 1px solid #e4eeee;
+
+    color: var(--brand-dark);
+
+    font-size: .55rem;
+    font-weight: 800;
+
+    transition: all .2s ease;
+}
+
+.order-availability-day-chip.today {
+    background: #ecfdf5;
+    border-color: rgba(16,185,129,.28);
+    color: #059669;
+
+    box-shadow:
+        0 0 0 3px rgba(16,185,129,.07);
+}
+
+.order-availability-days-empty {
+    padding: .25rem 0;
+
+    color: #a8a29e;
+    font-size: .58rem;
+    font-weight: 600;
 }
 
 .order-availability-days-title i {
