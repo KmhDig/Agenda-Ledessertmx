@@ -1632,6 +1632,61 @@ Notas adicionales:</textarea>
                         <div id="blockedDatesList" class="flex flex-wrap gap-2"></div>
                     </div>
                 </div>
+                // ============================================
+// DÍAS CERRADOS EN CALENDARIO
+// ============================================
+
+function renderCalendarClosedDaysAdmin() {
+
+    const container =
+        document.getElementById('calendarClosedDaysAdminList');
+
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    const days = [
+        ['lunes', 'Lunes'],
+        ['martes', 'Martes'],
+        ['miercoles', 'Miércoles'],
+        ['jueves', 'Jueves'],
+        ['viernes', 'Viernes'],
+        ['sabado', 'Sábado'],
+        ['domingo', 'Domingo']
+    ];
+
+    if (!state.calendarClosedDays) {
+        state.calendarClosedDays = {};
+    }
+
+    days.forEach(([key, label]) => {
+
+        const cerrado =
+            state.calendarClosedDays[key] === true;
+
+        const labelElement =
+            document.createElement('label');
+
+        labelElement.className =
+            'flex items-center gap-2 p-3 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 cursor-pointer transition';
+
+        labelElement.innerHTML = `
+            <input
+                type="checkbox"
+                class="calendar-closed-day-checkbox w-4 h-4"
+                data-day="${key}"
+                ${cerrado ? 'checked' : ''}
+            >
+
+            <span class="text-xs font-bold text-stone-700">
+                ${label}
+            </span>
+        `;
+
+        container.appendChild(labelElement);
+    });
+}
+                
                 <!-- POCA DISPONIBILIDAD -->
 <div class="mt-5 pt-5 border-t border-stone-100">
 
