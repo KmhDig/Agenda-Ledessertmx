@@ -3011,6 +3011,7 @@ const AVAILABILITY_MONTHS = [
 
 
 // ============================================
+// ============================================
 // DÍAS DE LA SEMANA PARA EL CALENDARIO
 // ============================================
 
@@ -3023,6 +3024,68 @@ const ORDER_DAY_KEYS = [
     'viernes',
     'sabado'
 ];
+
+
+// ============================================
+// ESTADO DE DISPONIBILIDAD DE UNA FECHA
+// ============================================
+
+function availabilityStatusForDate(key) {
+
+    // 🔴 AGENDA LLENA
+    if (
+        state.blockedDates &&
+        state.blockedDates.includes(key)
+    ) {
+        return 'full';
+    }
+
+    // 🟡 POCA DISPONIBILIDAD
+    if (
+        state.limitedDates &&
+        state.limitedDates.includes(key)
+    ) {
+        return 'limited';
+    }
+
+    // ⚪ DÍA CERRADO EN CALENDARIO
+    const date = dateFromKey(key);
+
+    const dayKey =
+        ORDER_DAY_KEYS[date.getDay()];
+
+    if (
+        state.calendarClosedDays &&
+        state.calendarClosedDays[dayKey] === true
+    ) {
+        return 'closed';
+    }
+
+    // ⚪ REVISAR DÍA DE ATENCIÓN
+    if (state.orderHours) {
+
+        const schedule =
+            state.orderHours[dayKey];
+
+        if (
+            !schedule ||
+            schedule.activo === false
+        ) {
+            return 'closed';
+        }
+    }
+
+    // ⚪ FECHAS ANTERIORES A HOY
+    const todayKey =
+        normalizeDateKey(new Date());
+
+    if (key < todayKey) {
+        return 'closed';
+    }
+
+    // 🟢 DISPONIBLE
+    return 'available';
+}
 
 
 // ============================================
@@ -3057,60 +3120,6 @@ function dateFromKey(key) {
     );
 }
 
-
-// ============================================
-// ESTADO DE DISPONIBILIDAD DE UNA FECHA
-// ============================================
-
-function availabilityStatusForDate(key) {
-
-    // 🔴 AGENDA LLENA
-    if (
-        state.blockedDates &&
-        state.blockedDates.includes(key)
-    ) {
-        return 'full';
-    }
-
-    // 🟡 POCA DISPONIBILIDAD
-    if (
-        state.limitedDates &&
-        state.limitedDates.includes(key)
-    ) {
-        return 'limited';
-    }
-
-    // ⚪ REVISAR DÍA DE ATENCIÓN
-    const date = dateFromKey(key);
-
-    const dayKey =
-        ORDER_DAY_KEYS[date.getDay()];
-
-    // Si tienes orderHours configurado
-    if (state.orderHours) {
-
-        const schedule =
-            state.orderHours[dayKey];
-
-        if (
-            !schedule ||
-            schedule.activo === false
-        ) {
-            return 'closed';
-        }
-    }
-
-    // Fechas anteriores a hoy
-    const todayKey =
-        normalizeDateKey(new Date());
-
-    if (key < todayKey) {
-        return 'closed';
-    }
-
-    // 🟢 DISPONIBLE
-    return 'available';
-}
 
 
 // ============================================
