@@ -2305,6 +2305,11 @@ const DEFAULT_STATE = {
     },
 
     privateMessageTemplate: '¡Hola! Muchas gracias por tu anticipo. Te compartimos la dirección privada para la entrega de tu pedido: Calle Olmo #405, Col. Jardines, Mty. ¡Te esperamos!',
+     // DATOS DE PAGO
+    paymentBank: 'BBVA',
+    paymentHolder: 'María López',
+    paymentAccount: '012345678901234567',
+    paymentAdditional: 'Después de realizar el pago, por favor envíame tu comprobante por este medio.',
 
     blockedDates: [],
     limitedDates: [],
@@ -2636,6 +2641,29 @@ if (config.branches) {
         if (config.privateMessageTemplate !== undefined) {
             state.privateMessageTemplate = config.privateMessageTemplate;
         }
+        // ============================================
+// CARGAR DATOS DE PAGO
+// ============================================
+
+state.paymentBank =
+    config.paymentBank !== undefined
+        ? String(config.paymentBank)
+        : 'BBVA';
+
+state.paymentHolder =
+    config.paymentHolder !== undefined
+        ? String(config.paymentHolder)
+        : 'María López';
+
+state.paymentAccount =
+    config.paymentAccount !== undefined
+        ? String(config.paymentAccount)
+        : '012345678901234567';
+
+state.paymentAdditional =
+    config.paymentAdditional !== undefined
+        ? String(config.paymentAdditional)
+        : 'Después de realizar el pago, por favor envíame tu comprobante por este medio.';
 
       if (config.blockedDates) {
     state.blockedDates = config.blockedDates.map(fecha => {
@@ -3918,6 +3946,12 @@ guardarConfiguracionEnGoogleSheets();
     branches: state.branches,
     catalogs: state.catalogs,
     privateMessageTemplate: state.privateMessageTemplate,
+         // DATOS DE PAGO
+    paymentBank: state.paymentBank,
+    paymentHolder: state.paymentHolder,
+    paymentAccount: state.paymentAccount,
+    paymentAdditional: state.paymentAdditional,
+        
     blockedDates: state.blockedDates,
     limitedDates: state.limitedDates,
     orderDays: state.orderDays,
@@ -4001,6 +4035,35 @@ guardarConfiguracionEnGoogleSheets();
     guardarConfiguracionEnGoogleSheets();
 
     showToast('Plantilla de dirección privada guardada', 'success');
+}
+     // ============================================
+// GUARDAR DATOS DE PAGO
+// ============================================
+
+function savePaymentInfoDraft() {
+
+    state.paymentBank =
+        document.getElementById('paymentInfoBank').value.trim();
+
+    state.paymentHolder =
+        document.getElementById('paymentInfoHolder').value.trim();
+
+    state.paymentAccount =
+        document.getElementById('paymentInfoAccount').value.trim();
+
+    state.paymentAdditional =
+        document.getElementById('paymentInfoAdditional').value.trim();
+
+    saveAppState();
+
+    guardarConfiguracionEnGoogleSheets();
+
+    updatePaymentInfoPreview();
+
+    showToast(
+        'Datos de pago guardados correctamente',
+        'success'
+    );
 }
         // PUNTOS DE RECOLECCIÓN
         function addBranch() {
