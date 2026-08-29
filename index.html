@@ -1632,15 +1632,13 @@ Notas adicionales:</textarea>
                         <div id="blockedDatesList" class="flex flex-wrap gap-2"></div>
                     </div>
                 </div>
-                
 // ============================================
 // DÍAS CERRADOS EN CALENDARIO
 // ============================================
 
 function renderCalendarClosedDaysAdmin() {
 
-    const container =
-        document.getElementById('calendarClosedDaysAdminList');
+    const container = document.getElementById('calendarClosedDaysAdminList');
 
     if (!container) return;
 
@@ -1660,29 +1658,38 @@ function renderCalendarClosedDaysAdmin() {
         state.calendarClosedDays = {};
     }
 
-    days.forEach(([key, label]) => {
+    days.forEach(function(day) {
 
-        const cerrado =
-            state.calendarClosedDays[key] === true;
+        const key = day[0];
+        const label = day[1];
 
-        const labelElement =
-            document.createElement('label');
+        const cerrado = state.calendarClosedDays[key] === true;
+
+        const labelElement = document.createElement('label');
 
         labelElement.className =
             'flex items-center gap-2 p-3 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 cursor-pointer transition';
 
-        labelElement.innerHTML = `
-            <input
-                type="checkbox"
-                class="calendar-closed-day-checkbox w-4 h-4"
-                data-day="${key}"
-                ${cerrado ? 'checked' : ''}
-            >
+        const checkbox = document.createElement('input');
 
-            <span class="text-xs font-bold text-stone-700">
-                ${label}
-            </span>
-        `;
+        checkbox.type = 'checkbox';
+
+        checkbox.className =
+            'calendar-closed-day-checkbox w-4 h-4';
+
+        checkbox.dataset.day = key;
+
+        checkbox.checked = cerrado;
+
+        const text = document.createElement('span');
+
+        text.className =
+            'text-xs font-bold text-stone-700';
+
+        text.textContent = label;
+
+        labelElement.appendChild(checkbox);
+        labelElement.appendChild(text);
 
         container.appendChild(labelElement);
     });
