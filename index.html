@@ -3890,19 +3890,19 @@ guardarConfiguracionEnGoogleSheets();
   function guardarConfiguracionEnGoogleSheets() {
 
     const configuracion = {
-        businessPhone: state.businessPhone,
-        socials: state.socials,
-        branches: state.branches,
-        catalogs: state.catalogs,
-        privateMessageTemplate: state.privateMessageTemplate,
-        blockedDates: state.blockedDates,
-        limitedDates: state.limitedDates,
-        orderDays: state.orderDays,
-         pin: state.pin,
-        emailPrimary: state.emailPrimary,
-        emailSecondary: state.emailSecondary
-    };
-
+    businessPhone: state.businessPhone,
+    socials: state.socials,
+    branches: state.branches,
+    catalogs: state.catalogs,
+    privateMessageTemplate: state.privateMessageTemplate,
+    blockedDates: state.blockedDates,
+    limitedDates: state.limitedDates,
+    orderDays: state.orderDays,
+    calendarClosedDays: state.calendarClosedDays,
+    pin: state.pin,
+    emailPrimary: state.emailPrimary,
+    emailSecondary: state.emailSecondary
+};
     const data = {
         accion: 'guardarConfiguracion',
         configuracion: configuracion
@@ -4465,6 +4465,34 @@ function renderOrderAvailabilityDays() {
 
     showToast(
         'Días para recibir pedidos guardados correctamente',
+        'success'
+    );
+}
+     function saveCalendarClosedDays() {
+
+    if (!state.calendarClosedDays) {
+        state.calendarClosedDays = {};
+    }
+
+    document
+        .querySelectorAll('.calendar-closed-day-checkbox')
+        .forEach(function(checkbox) {
+
+            const day = checkbox.dataset.day;
+
+            state.calendarClosedDays[day] =
+                checkbox.checked;
+
+        });
+
+    saveAppState();
+
+    guardarConfiguracionEnGoogleSheets();
+
+    renderAvailabilityCalendar();
+
+    showToast(
+        'Días cerrados en calendario guardados correctamente',
         'success'
     );
 }
