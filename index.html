@@ -2952,12 +2952,12 @@ function availabilityStatusForDate(key) {
 
     const dayKey = ORDER_DAY_KEYS[date.getDay()];
 
-    if (
-        state.orderDays &&
-        state.orderDays[dayKey] === false
-    ) {
-        return 'closed';
-    }
+   if (
+    state.calendarClosedDays &&
+    state.calendarClosedDays[dayKey] === true
+) {
+    return 'closed';
+}
 
     // ⚪ FECHA PASADA
     const todayKey = normalizeDateKey(new Date());
