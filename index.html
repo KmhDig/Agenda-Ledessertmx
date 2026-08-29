@@ -2919,7 +2919,10 @@ function showToast(message, type = 'info') {
     }
 
     // 🔴 FECHA COMPLETAMENTE BLOQUEADA
-    if (state.blockedDates.includes(inputDate)) {
+    if (
+        state.blockedDates &&
+        state.blockedDates.includes(inputDate)
+    ) {
 
         warningEl.textContent =
             '🔴 Esta fecha está completamente llena en agenda. Elige otra fecha disponible.';
@@ -2929,26 +2932,22 @@ function showToast(message, type = 'info') {
         return;
     }
 
- function availabilityStatusForDate(key) {
-
-    // 🔴 AGENDA LLENA
-    if (
-        state.blockedDates &&
-        state.blockedDates.includes(key)
-    ) {
-        return 'full';
-    }
-
-    // 🟡 POCA DISPONIBILIDAD
+    // 🟡 FECHA CON POCA DISPONIBILIDAD
     if (
         state.limitedDates &&
-        state.limitedDates.includes(key)
+        state.limitedDates.includes(inputDate)
     ) {
-        return 'limited';
+
+        warningEl.textContent =
+            '🟡 Esta fecha tiene poca disponibilidad. Te recomendamos confirmar tu pedido lo antes posible.';
+
+        warningEl.classList.remove('hidden');
+
+        return;
     }
 
     // ⚪ DÍA CERRADO EN CALENDARIO
-    const date = dateFromKey(key);
+    const date = dateFromKey(inputDate);
 
     const dayKey =
         ORDER_DAY_KEYS[date.getDay()];
@@ -2957,7 +2956,13 @@ function showToast(message, type = 'info') {
         state.calendarClosedDays &&
         state.calendarClosedDays[dayKey] === true
     ) {
-        return 'closed';
+
+        warningEl.textContent =
+            '⚪ Este día está cerrado en el calendario. Elige otra fecha disponible.';
+
+        warningEl.classList.remove('hidden');
+
+        return;
     }
 
     // ⚪ DÍA NO DISPONIBLE PARA RECIBIR PEDIDOS
@@ -2965,19 +2970,17 @@ function showToast(message, type = 'info') {
         state.orderDays &&
         state.orderDays[dayKey] === false
     ) {
-        return 'closed';
+
+        warningEl.textContent =
+            '⚪ Este día no está disponible para recibir pedidos. Elige otra fecha.';
+
+        warningEl.classList.remove('hidden');
+
+        return;
     }
 
-    // ⚪ FECHA PASADA
-    const todayKey =
-        normalizeDateKey(new Date());
-
-    if (key < todayKey) {
-        return 'closed';
-    }
-
-    // 🟢 DISPONIBLE
-    return 'available';
+    // 🟢 FECHA DISPONIBLE
+    warningEl.classList.add('hidden');
 }
             
  // ============================================================
