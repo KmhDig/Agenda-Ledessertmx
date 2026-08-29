@@ -1716,41 +1716,24 @@ Notas adicionales:</textarea>
         Guardar días
     </button>
 
-</div>      
-                <!-- 8. DÍAS PARA RECIBIR PEDIDOS -->
-<div class="admin-section-card space-y-4">
-    <div class="flex items-center gap-2.5 border-b border-stone-100 pb-3">
-        <span class="w-8 h-8 rounded-xl bg-teal-50 text-brand-600 flex items-center justify-center text-sm">
-            <i class="fa-solid fa-calendar-check"></i>
-        </span>
-
-        <div>
-            <h4 class="font-bold text-brand-700 text-base">
-                Días para recibir pedidos
-            </h4>
-
-            <p class="text-[11px] text-stone-400">
-                Selecciona los días en los que los clientes pueden enviar pedidos.
-                No se limita la hora.
-            </p>
-        </div>
-    </div>
-
-    <!-- DÍAS -->
+</div>  
+                <!-- DÍAS CERRADOS -->
     <div
-        id="orderDaysAdminList"
+        id="calendarClosedDaysAdminList"
         class="grid grid-cols-2 sm:grid-cols-4 gap-2">
     </div>
 
     <!-- BOTÓN GUARDAR -->
     <button
         type="button"
-        onclick="saveOrderDays()"
-        class="mt-2 px-4 py-2 rounded-xl bg-teal-600 text-white text-sm font-bold">
-        Guardar días
+        onclick="saveCalendarClosedDays()"
+        class="mt-2 px-4 py-2 rounded-xl bg-stone-600 text-white text-sm font-bold">
+        <i class="fa-solid fa-floppy-disk mr-1"></i>
+        Guardar días cerrados
     </button>
 
 </div>
+               
                 <!-- 8. HISTORIAL GENERAL DE PEDIDOS (CON ESTATUS DE FINANZAS) -->
                 <div class="space-y-4 pt-2">
                     <div class="flex justify-between items-center">
