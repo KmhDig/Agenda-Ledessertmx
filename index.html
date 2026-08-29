@@ -4402,6 +4402,17 @@ function updateOrderAvailability() {
                         <button onclick="openEditFormModal('${order.id}')" class="bg-stone-100 hover:bg-stone-200 text-brand-700 px-3 py-1.5 rounded-xl font-semibold transition flex items-center gap-1.5">
                             <i class="fa-solid fa-pen"></i> Editar Datos
                         </button>
+                        
+                        <!-- Información financiera por WhatsApp -->
+                        <button onclick="sendFinancialInfo('${order.id}')" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-xl font-semibold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-money-bill-wave"></i> Enviar información de pago
+                         </button>
+                         
+                         <!-- Datos para realizar el pago -->
+                         <button onclick="openPaymentInfoModal('${order.id}')"
+                         class="bg-amber-50 hover:bg-amber-100 text-amber-800 px-3 py-1.5 rounded-xl font-semibold transition flex items-center gap-1.5">
+                         <i class="fa-solid fa-credit-card"></i> Enviar datos para realizar el pago
+                         </button>
 
                         <!-- Eliminar Pedido -->
                         <button onclick="deleteOrder('${order.id}')" class="ml-auto text-rose-500 hover:text-rose-700 p-1.5 hover:bg-rose-50 rounded-xl transition">
