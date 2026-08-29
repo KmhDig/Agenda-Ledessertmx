@@ -2363,16 +2363,24 @@ if (config.branches) {
         return String(fecha).substring(0, 10);
     }).filter(Boolean);
 }
-// Cargar días permitidos para recibir pedidos
-if (config.orderDays) {
-    state.orderDays = {
-        ...state.orderDays,
-        ...config.orderDays
-    };
-}
+// ============================================
+// CARGAR DÍAS PARA RECIBIR PEDIDOS
+// ============================================
 
-// ACTUALIZAR ESTADO DE PEDIDOS
-updateOrderAvailability();
+const diasPedidosPorDefecto = {
+    lunes: true,
+    martes: true,
+    miercoles: true,
+    jueves: true,
+    viernes: true,
+    sabado: true,
+    domingo: true
+};
+
+state.orderDays = {
+    ...diasPedidosPorDefecto,
+    ...(config.orderDays || {})
+};
 
 saveAppState();
 
@@ -2393,7 +2401,7 @@ console.log('Configuración cargada desde Google Sheets');
 } catch (error) {
     console.error('Error cargando configuración desde Google Sheets:', error);
 }
-}          
+}      
 async function cargarPedidosDesdeGoogleSheets() {
     try {
         const response = await fetch(
