@@ -179,7 +179,13 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-}       
+    width: 100%;
+    box-sizing: border-box;
+}  
+    .order-availability-content {
+    flex: 1;
+    min-width: 0;
+}
 
 /* ICONO */
 
@@ -310,16 +316,20 @@
     font-size: .58rem;
     font-weight: 600;
 }
-        /* ============================================
+/* ============================================
    DÍAS PARA RECIBIR PEDIDOS
    ============================================ */
+
 .order-availability-days {
-    margin-top: .85rem;
-    padding-top: .8rem;
+    display: block;
+    width: 100%;
+    margin-top: 1rem;
+    padding-top: .85rem;
 
-    border-top: 1px solid #f0f2f1;
+    border-top: 1px solid #eef2f1;
+
+    box-sizing: border-box;
 }
-
 .order-availability-days-title {
     display: flex;
     align-items: center;
