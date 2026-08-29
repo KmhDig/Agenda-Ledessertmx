@@ -1633,68 +1633,47 @@ Notas adicionales:</textarea>
                     </div>
                 </div>
                 
-// ============================================
-// DÍAS CERRADOS EN CALENDARIO
-// ============================================
+<!-- DÍAS CERRADOS EN CALENDARIO -->
+<div class="admin-section-card space-y-4">
 
-function renderCalendarClosedDaysAdmin() {
+    <div class="flex items-center gap-2.5 border-b border-stone-100 pb-3">
 
-    const container = document.getElementById('calendarClosedDaysAdminList');
+        <span class="w-8 h-8 rounded-xl bg-stone-100 text-stone-600 flex items-center justify-center text-sm">
+            <i class="fa-regular fa-calendar-xmark"></i>
+        </span>
 
-    if (!container) return;
+        <div>
 
-    container.innerHTML = '';
+            <h4 class="font-bold text-brand-700 text-base">
+                Días cerrados en calendario
+            </h4>
 
-    const days = [
-        ['lunes', 'Lunes'],
-        ['martes', 'Martes'],
-        ['miercoles', 'Miércoles'],
-        ['jueves', 'Jueves'],
-        ['viernes', 'Viernes'],
-        ['sabado', 'Sábado'],
-        ['domingo', 'Domingo']
-    ];
+            <p class="text-[11px] text-stone-400">
+                Selecciona los días de la semana que deseas marcar como cerrados en el calendario.
+            </p>
 
-    if (!state.calendarClosedDays) {
-        state.calendarClosedDays = {};
-    }
+        </div>
 
-    days.forEach(function(day) {
+    </div>
 
-        const key = day[0];
-        const label = day[1];
+    <!-- DÍAS LUNES A DOMINGO -->
+    <div
+        id="calendarClosedDaysAdminList"
+        class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+    </div>
 
-        const cerrado = state.calendarClosedDays[key] === true;
+    <!-- BOTÓN GUARDAR -->
+    <button
+        type="button"
+        onclick="saveCalendarClosedDays()"
+        class="mt-2 px-4 py-2 rounded-xl bg-stone-600 text-white text-sm font-bold">
 
-        const labelElement = document.createElement('label');
+        <i class="fa-solid fa-floppy-disk mr-1"></i>
+        Guardar días cerrados
 
-        labelElement.className =
-            'flex items-center gap-2 p-3 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 cursor-pointer transition';
+    </button>
 
-        const checkbox = document.createElement('input');
-
-        checkbox.type = 'checkbox';
-
-        checkbox.className =
-            'calendar-closed-day-checkbox w-4 h-4';
-
-        checkbox.dataset.day = key;
-
-        checkbox.checked = cerrado;
-
-        const text = document.createElement('span');
-
-        text.className =
-            'text-xs font-bold text-stone-700';
-
-        text.textContent = label;
-
-        labelElement.appendChild(checkbox);
-        labelElement.appendChild(text);
-
-        container.appendChild(labelElement);
-    });
-}
+</div>
                 
                 <!-- POCA DISPONIBILIDAD -->
 <div class="mt-5 pt-5 border-t border-stone-100">
