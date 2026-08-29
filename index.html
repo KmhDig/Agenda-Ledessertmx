@@ -339,8 +339,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 34px;
-    padding: .3rem .5rem;
+    min-width: 38px;
+    padding: .34rem .58rem;
     border-radius: 999px;
     background: #f0f7f7;
     border: 1px solid #dbecec;
@@ -348,6 +348,20 @@
     font-size: .57rem;
     font-weight: 800;
     line-height: 1;
+    transition: all .2s ease;
+}
+
+.order-availability-day-chip:hover {
+    transform: translateY(-1px);
+    border-color: rgba(84,151,166,.25);
+}
+
+/* HOY */
+.order-availability-day-chip.today {
+    background: #e7f5f3;
+    border-color: rgba(84,151,166,.35);
+    color: var(--brand-dark);
+    box-shadow: 0 3px 10px rgba(84,151,166,.10);
 }
         #toast-container {
             position: fixed;
@@ -3862,15 +3876,32 @@ function renderOrderAvailabilityDays() {
             <span>Días para recibir pedidos</span>
         </div>
 
-        <div class="order-availability-days-list">
-            ${diasActivos.map(dia => `
-                <span class="order-availability-day-chip">
-                    ${nombresDias[dia]}
-                </span>
-            `).join('')}
-        </div>
-    `;
+    <div class="order-availability-days-list">
+    ${diasActivos.map(dia => {
+
+        const hoy = new Date();
+
+        const diaActual = [
+            'domingo',
+            'lunes',
+            'martes',
+            'miercoles',
+            'jueves',
+            'viernes',
+            'sabado'
+        ][hoy.getDay()];
+
+        return `
+            <span class="order-availability-day-chip ${dia === diaActual ? 'today' : ''}">
+                ${nombresDias[dia]}
+            </span>
+        `;
+
+    }).join('')}
+</div>
+`;
 }
+
 
     document.querySelectorAll('.order-day-checkbox').forEach(checkbox => {
 
