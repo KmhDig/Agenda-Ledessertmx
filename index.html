@@ -2929,28 +2929,7 @@ function showToast(message, type = 'info') {
         return;
     }
 
-    // 🟡 FECHA CON POCA DISPONIBILIDAD
-    if (
-        state.limitedDates &&
-        state.limitedDates.includes(inputDate)
-    ) {
-
-        warningEl.textContent =
-            '🟡 Esta fecha tiene poca disponibilidad. Te recomendamos confirmar tu pedido lo antes posible.';
-
-        warningEl.classList.remove('hidden');
-
-        return;
-    }
-
-    // 🟢 FECHA DISPONIBLE
-    warningEl.classList.add('hidden');
-}
-    
-     // ============================================
-// ESTADO DE DISPONIBILIDAD DE UNA FECHA
-// ============================================
-function availabilityStatusForDate(key) {
+ function availabilityStatusForDate(key) {
 
     // 🔴 AGENDA LLENA
     if (
@@ -2968,30 +2947,36 @@ function availabilityStatusForDate(key) {
         return 'limited';
     }
 
-    // ⚪ DÍA CERRADO
-const date = dateFromKey(key);
+    // ⚪ DÍA CERRADO EN CALENDARIO
+    const date = dateFromKey(key);
 
-const CALENDAR_DAY_KEYS = [
-    'domingo',
-    'lunes',
-    'martes',
-    'miercoles',
-    'jueves',
-    'viernes',
-    'sabado'
-];
+    const dayKey =
+        ORDER_DAY_KEYS[date.getDay()];
 
-const dayKey = CALENDAR_DAY_KEYS[date.getDay()];
+    if (
+        state.calendarClosedDays &&
+        state.calendarClosedDays[dayKey] === true
+    ) {
+        return 'closed';
+    }
 
-if (
-    state.calendarClosedDays &&
-    state.calendarClosedDays[dayKey] === true
-) {
-    return 'closed';
-}
+    // ⚪ REVISAR DÍA DE ATENCIÓN
+    if (state.orderHours) {
 
-    // ⚪ FECHA PASADA
-    const todayKey = normalizeDateKey(new Date());
+        const schedule =
+            state.orderHours[dayKey];
+
+        if (
+            !schedule ||
+            schedule.activo === false
+        ) {
+            return 'closed';
+        }
+    }
+
+    // ⚪ FECHAS ANTERIORES A HOY
+    const todayKey =
+        normalizeDateKey(new Date());
 
     if (key < todayKey) {
         return 'closed';
@@ -3000,7 +2985,7 @@ if (
     // 🟢 DISPONIBLE
     return 'available';
 }
-// ============================================================
+ // ============================================================
 // CALENDARIO DE DISPONIBILIDAD
 // ============================================================
 
