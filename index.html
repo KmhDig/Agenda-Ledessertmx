@@ -5514,10 +5514,16 @@ const anticipo =
 order.anticipoPorcentaje = porcentaje;
 order.anticipoSolicitado = anticipo;
 
+// Guardar en el estado local
+saveAppState();
+
+// Guardar también en Google Sheets → Finanzas
+actualizarFinanzasEnGoogleSheets(order);
+
 document.getElementById('paymentInfoAmount').textContent =
     `$${anticipo.toFixed(2)} MXN`;
 
-    updatePaymentInfoPreview();
+updatePaymentInfoPreview();
 }
 
 
